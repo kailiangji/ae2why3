@@ -392,7 +392,7 @@ let print_fun_args fmt args =
   ) args
 
     
-let print_logic fmt (g, lib, lg) =
+let print_logic fmt (g, lib, lg, f_rm) =
   match lg with
   | Logic (nam_kd,id_lst, ty) ->
      begin       
@@ -409,8 +409,10 @@ let print_logic fmt (g, lib, lg) =
 			 lib.bool_lib <- true;
 			 fprintf fmt "\n\nuse import bool.Bool"
 		       end;
-		     fprintf fmt "\n\nconstant %a%a: bool"
-		       print_fun_name id  print_fun_type ty
+		     if List.mem (fst id) f_rm then ()
+		     else
+		       fprintf fmt "\n\nconstant %a%a: bool"
+			 print_fun_name id  print_fun_type ty
 		   )id_lst
 		 else
 		   begin
@@ -424,8 +426,10 @@ let print_logic fmt (g, lib, lg) =
 			   lib.bool_lib <- true;
 			   fprintf fmt "\n\nuse import bool.Bool"
 			 end;
-		       fprintf fmt "\n\nfunction %a%a: bool"
-			 print_fun_name id  print_fun_type ty
+		       if List.mem (fst id) f_rm then ()
+		       else
+			 fprintf fmt "\n\nfunction %a%a: bool"
+			   print_fun_name id  print_fun_type ty
 		     )id_lst
 		   end
 	       end
@@ -445,8 +449,10 @@ let print_logic fmt (g, lib, lg) =
 			 | PPTreal -> g.r_funs <- (fst id) :: g.r_funs
 			 | _ -> ()
 		       end;
-		       fprintf fmt "\n\nconstant %a%a"
-			 print_fun_name id print_fun_type ty
+		       if List.mem (fst id) f_rm then ()
+		       else
+			 fprintf fmt "\n\nconstant %a%a"
+			   print_fun_name id print_fun_type ty
 		     )id_lst
 		   end
 		 else
@@ -464,8 +470,10 @@ let print_logic fmt (g, lib, lg) =
 			   | PPTreal -> g.r_funs <- (fst id) :: g.r_funs
 			   | _ -> ()
 			 end;
-			 fprintf fmt "\n\nfunction %a%a"
-			   print_fun_name id print_fun_type ty
+			 if List.mem (fst id) f_rm then ()
+			 else
+			   fprintf fmt "\n\nfunction %a%a"
+			     print_fun_name id print_fun_type ty
 		       )id_lst
 		     end
 	       end
@@ -542,7 +550,30 @@ let rec print_lexpr fmt (g, l, expr) =
        | "abs_int" -> fprintf fmt "(IA.abs%a)" print_lexprs (g, l, exprs)
        | "abs_real" -> fprintf fmt "(RA.abs%a)" print_lexprs (g, l, exprs)
        | "real_of_int" -> fprintf fmt "(from_int%a)" print_lexprs (g, l, exprs)
-       |_ -> fprintf fmt "(%s%a)" (String.uncapitalize id) print_lexprs (g, l, exprs)
+       | "round" -> fprintf fmt "(S.round%a)" print_lexprs (g, l, exprs)
+       | "value" -> fprintf fmt "(S.value%a)" print_lexprs (g, l, exprs)
+       | "exact" -> fprintf fmt "(S.exact%a)" print_lexprs (g, l, exprs)
+       | "fpa_rounding_model" -> fprintf fmt "(S.model%a)"
+	  print_lexprs (g, l, exprs)
+       | "round_error" -> fprintf fmt "(S.round_error%a)"
+	  print_lexprs (g, l, exprs)
+       | "total_error" -> fprintf fmt "(S.total_error%a)"
+	  print_lexprs (g, l, exprs)
+       | "round_logic" -> fprintf fmt "(S.round_logic%a)"
+	  print_lexprs (g, l, exprs)
+       | "round1" -> fprintf fmt "(D.round%a)" print_lexprs (g, l, exprs)
+       | "value1" -> fprintf fmt "(D.value%a)" print_lexprs (g, l, exprs)
+       | "exact1" -> fprintf fmt "(D.exact%a)" print_lexprs (g, l, exprs)
+       | "fpa_rounding_model1" -> fprintf fmt "(D.model%a)"
+	  print_lexprs (g, l, exprs)
+       | "round_error1" -> fprintf fmt "(D.round_error%a)"
+	  print_lexprs (g, l, exprs)
+       | "total_error1" -> fprintf fmt "(D.total_error%a)"
+	  print_lexprs (g, l, exprs)
+       | "round_logic1" -> fprintf fmt "(D.round_logic%a)"
+	  print_lexprs (g, l, exprs)
+       |_ -> fprintf fmt "(%s%a)"
+	  (String.uncapitalize id) print_lexprs (g, l, exprs)
      end
   | PPinInterval _ -> assert false
   | PPdistinct exprs -> assert false
@@ -739,32 +770,34 @@ and print_trigger fmt (g, l, tr) =
        ) tl
      end
      
-let print_func fmt (g,lib,f) =
-  let l = {int_vars = []; real_vars = []} in
+let print_func fmt (g,lib,f, f_rm) =
   match f with
   | Function_def (name_id, args, prim_ty, exp )->
-     begin
-       let fun_lst = ref [] in
-       test_fun_names g lib exp fun_lst;
-       List.iter (fun fname -> fprintf fmt "%a" print_modules fname)
-	 (List.rev !fun_lst);
-       List.iter (fun arg ->
-	 let (id,ty) = arg in
-	 match ty with
-	 | PPTint -> l.int_vars <- id :: l.int_vars
-	 | PPTreal -> l.real_vars <- id :: l.real_vars
-	 | _ -> ()
-       )args;
+     if List.mem (fst name_id) f_rm then ()
+     else
        begin
-	 match prim_ty with
-	 | PPTint -> g.i_funs <- (fst name_id) :: g.i_funs
-	 | PPTreal -> g.r_funs <- (fst name_id) :: g.r_funs
-	 | _ -> ()
-       end;
-       fprintf fmt "\n\nfunction %a%a: %a = %a"
-	 print_fun_name name_id print_fun_args args
-	 print_ppure_type prim_ty  print_lexpr (g, l, exp)
-    end
+	 let l = {int_vars = []; real_vars = []} in
+	 let fun_lst = ref [] in
+	 test_fun_names g lib exp fun_lst;
+	 List.iter (fun fname -> fprintf fmt "%a" print_modules fname)
+	   (List.rev !fun_lst);
+	 List.iter (fun arg ->
+	   let (id,ty) = arg in
+	   match ty with
+	   | PPTint -> l.int_vars <- id :: l.int_vars
+	   | PPTreal -> l.real_vars <- id :: l.real_vars
+	   | _ -> ()
+	 )args;
+	 begin
+	   match prim_ty with
+	   | PPTint -> g.i_funs <- (fst name_id) :: g.i_funs
+	   | PPTreal -> g.r_funs <- (fst name_id) :: g.r_funs
+	   | _ -> ()
+	 end;
+	 fprintf fmt "\n\nfunction %a%a: %a = %a"
+	   print_fun_name name_id print_fun_args args
+	   print_ppure_type prim_ty  print_lexpr (g, l, exp)
+       end
   | _ -> assert false
 
 
@@ -773,42 +806,44 @@ let print_pred_name fmt id =
   if String.length n2 = 0 then fprintf fmt "%s " (String.uncapitalize n1)
   else fprintf fmt "%s %s " (String.uncapitalize n1) n2
   
-let print_pred fmt (g, lib, p) =
-  let l = {int_vars = []; real_vars = []} in
+let print_pred fmt (g, lib, p, preds_rm) = 
   match p with
   | Predicate_def (id, lbls, exp) ->
-     begin
-       let ty_lst = ref [] in
-       test_types lib lbls ty_lst;
-        List.iter
-	 (fun ty_lib ->
-	   fprintf fmt "%a" print_modules ty_lib
-	 ) (List.rev !ty_lst);
-       let fun_lst = ref [] in
-       test_fun_names g lib exp fun_lst;
-       List.iter
-	 (fun fname ->
-	   fprintf fmt "%a" print_modules fname
-	 ) (List.rev !fun_lst);
+     if List.mem (fst id) preds_rm then ()
+     else
        begin
-	 match lbls with
-	 | [] -> fprintf fmt "\n\npredicate %a= %a"
-	    print_pred_name id print_lexpr (g, l, exp)
-	 | _ ->
-	  begin
-	    List.iter (fun lbl ->
-	      let (id,ty) = lbl in
-	      match ty with
-	      | PPTint -> l.int_vars <- id :: l.int_vars
-	      | PPTreal -> l.real_vars <- id :: l.real_vars
-	      | _ -> ()
-	    )lbls;
-	    fprintf fmt "\n\npredicate %a%a=\n   %a"	  
-	      print_pred_name id print_fun_args lbls
-	      print_lexpr (g, l, exp)
-	  end
+	 let l = {int_vars = []; real_vars = []} in
+	 let ty_lst = ref [] in
+	 test_types lib lbls ty_lst;
+         List.iter
+	   (fun ty_lib ->
+	     fprintf fmt "%a" print_modules ty_lib
+	   ) (List.rev !ty_lst);
+	 let fun_lst = ref [] in
+	 test_fun_names g lib exp fun_lst;
+	 List.iter
+	   (fun fname ->
+	     fprintf fmt "%a" print_modules fname
+	   ) (List.rev !fun_lst);
+	 begin
+	   match lbls with
+	   | [] -> fprintf fmt "\n\npredicate %a= %a"
+	      print_pred_name id print_lexpr (g, l, exp)
+	   | _ ->
+	      begin
+		List.iter (fun lbl ->
+		  let (id,ty) = lbl in
+		  match ty with
+		  | PPTint -> l.int_vars <- id :: l.int_vars
+		  | PPTreal -> l.real_vars <- id :: l.real_vars
+		  | _ -> ()
+		)lbls;
+		fprintf fmt "\n\npredicate %a%a=\n   %a"	  
+		  print_pred_name id print_fun_args lbls
+		  print_lexpr (g, l, exp)
+	      end
+	 end
        end
-     end
   | _ -> assert false
 
 let rec test_local_types g lib expr ty_lst =
@@ -896,24 +931,26 @@ let rec test_local_types g lib expr ty_lst =
   | PPdistinct exp_lst ->
      List.iter (fun e1 -> test_local_types g lib e1 ty_lst) exp_lst
      
-let print_axiom fmt (g, lib, ax) =
+let print_axiom fmt (g, lib, ax, ax_rm) =
   match ax with
   | Axiom (id, exp) ->
-     begin
-       let fun_lst = ref [] in
-       let ty_lst = ref [] in
-       test_local_types g lib exp ty_lst;
-       test_fun_names g lib exp fun_lst;
-       List.iter (fun ty ->
-	 fprintf fmt "%a" print_modules ty
-       ) (List.rev !ty_lst);
-       List.iter
-	 (fun fname ->
-	   fprintf fmt "%a" print_modules fname
-	 ) (List.rev !fun_lst);
-       let l = {int_vars = []; real_vars = []} in
-       fprintf fmt "\n\naxiom %s: %a" id print_lexpr (g, l, exp)
-     end
+     if List.mem id ax_rm then ()
+     else
+       begin
+	 let fun_lst = ref [] in
+	 let ty_lst = ref [] in
+	 test_local_types g lib exp ty_lst;
+	 test_fun_names g lib exp fun_lst;
+	 List.iter (fun ty ->
+	   fprintf fmt "%a" print_modules ty
+	 ) (List.rev !ty_lst);
+	 List.iter
+	   (fun fname ->
+	     fprintf fmt "%a" print_modules fname
+	   ) (List.rev !fun_lst);
+	 let l = {int_vars = []; real_vars = []} in
+	 fprintf fmt "\n\naxiom %s: %a" id print_lexpr (g, l, exp)
+       end
   | _ -> assert false
 
 let print_goal fmt (g, lib, goal) =
