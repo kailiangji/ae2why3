@@ -1,0 +1,6 @@
+logic pointer_address : 't pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+goal tt : 
+false

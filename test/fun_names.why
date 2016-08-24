@@ -1,0 +1,20 @@
+type double
+logic value1 : double -> real
+logic exact1 : double -> real
+
+
+function round_error1(x: double) : real = abs_real((value1(x) - exact1(x)))
+
+function total_error1(x: double) : real = abs_real((value1(x) - fpa_rounding_model1(x)))
+
+
+predicate no_overflow1(m: fpa_rounding_mode, x: real) =
+  (abs_real(float(52,1000,m, x)) <= 0x1.FFFFFFFFFFFFFp1023)
+
+predicate no_overflow(m: fpa_rounding_mode, x: real) =
+  (abs_real(float(26,100,m,x)) <= 0x1.FFFFFEp127)
+
+axiom Round_value1 :
+  (forall m:fpa_rounding_mode. forall x:double. (float(52,1000,m,value1(x)) = value1(x)))
+
+goal tt : false

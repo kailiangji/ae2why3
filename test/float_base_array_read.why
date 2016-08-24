@@ -1,0 +1,10 @@
+
+logic t : (int, real) farray
+
+logic x : real
+
+axiom t_x : t[3] = 5.
+
+
+goal h: -100. <= x <= 100. -> 
+ t[3 <- float(23, 100, NearestTiesToEven, x)][2+1] - x <= 1.

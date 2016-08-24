@@ -1,0 +1,92 @@
+type t1
+type ('a, 'b) t2
+type animal = Dog | Pig | Cat
+type rc = {indx1 : int; indx2 : real}
+
+logic f1 : int, int -> int
+logic c : int
+
+function f2(i:int,j:int):int = i + j + 2
+
+function f3 (i : real,j : real) : real = ((i + j) + 2.)
+
+
+logic a : (int, real) farray
+(*function f3(b : int farray): bool = b = b[j<-b[i],k<-w]*)
+
+predicate p(x : int, y : int) = x + y = 0
+
+predicate u(x : real, y : real) = x + y = 0.5
+
+predicate q = true and false
+
+type 'a set
+
+
+logic empty : 'a set
+logic add : 'a , 'a set -> 'a set
+logic mem : 'a , 'a set -> bool
+
+axiom mem_empty:
+  forall x : 'a.
+  not mem(x, empty)
+
+axiom mem_add:
+  forall x, y : 'a. forall s : 'a set.
+  mem(x, add(y, s)) <->
+  (x = y or mem(x, s))
+
+logic is1, is2 : int set
+logic iss : int set set
+
+
+goal g_3:
+  is1 = is2 -> 
+  (not mem(1, add(2+3, empty : int set))) and
+  mem (is1, add (is2, iss))
+
+
+goal g_4:
+  is1 = is2 -> 
+  (not mem(1, add(2+3, empty))) and
+  mem (is1, add (is2, iss))
+
+goal g_5 :
+  forall i,j,k:int.
+  forall v,w : 'a.
+  forall b : 'a farray.
+  b = b[j<-b[i],k<-w] ->
+  i = 1 ->
+  j = 2 -> 
+  k = 1 -> 
+  b[i] = b[j]
+
+goal g6 :
+  forall i, j : real.
+  i = 0.9 -> j = -0.4 -> u(i,j)
+
+goal g7 :
+  forall i, j : int.
+  i = 1 -> j = 2 ->
+  f2(i,j) + 2 = 5
+
+goal g8:
+forall i, j : real.
+i = 1.0 -> j = 2.5 ->
+f3(i,j) >= 4.5
+
+
+goal g9:   
+   forall i, j : real.
+   let v = i + j in
+   i = 3. ->
+   j = 3. ->
+   v + 3. = 9.
+
+
+goal g10:
+   forall i, j : real.
+   let v = (i - j = 1.) in
+   i = 4.5 ->
+   j = 3.5 ->
+   v

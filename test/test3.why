@@ -1,0 +1,17 @@
+
+logic const : 'b -> ('a,'b) farray
+
+axiom Const : (forall b:'b. forall a:'a. ((const(b)[a]) = b))
+
+logic abs_real : real -> real
+logic real_of_int : int -> real
+
+goal WP_parameter_s : ((0 <= 10) -> ((0 <= 9) ->
+  (forall r:real.
+  (forall i:int. (((0 <= i) and (i <= 9)) -> (((i <= 10) and
+  (abs_real((r - (0.1 * real_of_int(i)))) <= (0.001 * real_of_int(i)))) ->
+  (((0 <= i) and (i <  10)) ->
+  (forall r1:real.
+  ((r1 = float(23,100,NearestTiesToEven,(r + (const(float(23,100,NearestTiesToEven,0.1))[i])))) ->
+  ((i + 1) <= 10))))))))))
+

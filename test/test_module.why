@@ -1,0 +1,5 @@
+function g(x : int): int = abs_int(x)
+
+function t(x : real): real = float(23, 100, NearestTiesToEven, x)
+
+goal tt: false
