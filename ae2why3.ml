@@ -75,7 +75,8 @@ let () =
   let name = name_theory ori_file in
   let g =
     {i_vars = []; r_vars = []; i_funs = ["abs_int"];
-     r_funs = ["abs_real";"real_of_int"; "float";"sqrt_real"]} in
+     r_funs = ["abs_real";"real_of_int"; "float";"sqrt_real"];
+     b_vars = []; b_funs = []} in
   let lib =
     {int_lib   = false; real_lib  = false; bool_lib  = false;
      float_rnd = false; float_sgl = false; float_dbl = false;

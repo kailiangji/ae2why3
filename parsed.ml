@@ -102,8 +102,7 @@ type decl =
   | Goal of  string * lexpr
   | Logic of name_kind * (string * string) list * plogic_type
   | Predicate_def of
-       (string * string) *
-	( string * ppure_type) list * lexpr
+       (string * string) * ( string * ppure_type) list * lexpr
   | Function_def of
        (string * string) *
 	( string * ppure_type) list * ppure_type * lexpr
@@ -114,10 +113,12 @@ type file = decl list
 
 type g_decs =
   {mutable i_vars : string list; mutable r_vars : string list;
-   mutable i_funs : string list; mutable r_funs : string list}
+   mutable i_funs : string list; mutable r_funs : string list;
+   mutable b_vars : string list; mutable b_funs : string list}
 
 type loc_decs=
-  {mutable int_vars : string list; mutable real_vars : string list}
+  {mutable int_vars : string list; mutable real_vars : string list;
+   mutable bool_vars: string list}
 
 type lib_include =
   {mutable int_lib : bool; mutable real_lib : bool;
