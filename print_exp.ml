@@ -596,7 +596,7 @@ let rec print_lexpr fmt (g, l, expr) =
 	 print_lexpr (g, l, rexp)
       | PPand | PPor | PPimplies | PPiff | PPlt | PPle
       | PPgt | PPge | PPeq | PPneq ->
-	 fprintf fmt "%a %a %a" 
+	 fprintf fmt "(%a %a %a)" 
 	 print_lexpr (g, l, lexp)
 	 print_pp_infix (g, l, lexp, op)
 	 print_lexpr (g, l, rexp)
@@ -614,7 +614,7 @@ let rec print_lexpr fmt (g, l, expr) =
 	   fprintf fmt "(-%a)" print_lexpr (g, l, exp)
 	 else
 	   fprintf fmt "(-.%a)" print_lexpr (g, l, exp)
-      | PPnot -> fprintf fmt "not %a" print_lexpr (g, l, exp)
+      | PPnot -> fprintf fmt "(not %a)" print_lexpr (g, l, exp)
     end
   | PPget (lexp, rexp) ->
      fprintf fmt "%a[%a]"
