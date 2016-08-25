@@ -445,8 +445,8 @@ let print_logic fmt (g, lib, lg, f_rm) =
 		     List.iter (fun id ->
 		       begin
 			 match pp_ty with
-			 | PPTint -> g.i_funs <- (fst id) :: g.i_funs
-			 | PPTreal -> g.r_funs <- (fst id) :: g.r_funs
+			 | PPTint -> g.i_vars <- (fst id) :: g.i_vars
+			 | PPTreal -> g.r_vars <- (fst id) :: g.r_vars
 			 | _ -> ()
 		       end;
 		       if List.mem (fst id) f_rm then ()
@@ -853,7 +853,34 @@ let rec test_local_types g lib expr ty_lst =
   | PPapp (id, exprs) ->
      List.iter (fun e -> test_local_types g lib e ty_lst)
        exprs
-  | PPconst const -> ()
+  | PPconst const ->
+     begin
+       match const with
+       | ConstInt _ ->
+	  if lib.int_lib = false then
+	    begin
+	      lib.int_lib <- true;
+	      ty_lst := "int_lib" :: !ty_lst;
+	     end
+       | ConstReal _ ->
+	  if lib.real_lib = false then
+	    begin
+	      lib.real_lib <- true;
+	      ty_lst := "real_lib" :: !ty_lst;
+	     end
+       | ConstTrue | ConstFalse ->
+	  if lib.bool_lib = false then
+	    begin
+	      lib.bool_lib <- true;
+	      ty_lst := "bool_lib" :: !ty_lst
+	    end
+       | ConstVoid ->
+	  if lib.unit = false then
+	    begin
+	      lib.unit <- true;
+	      ty_lst := "unit" :: !ty_lst
+	    end
+     end
   | PPinfix (e1, op, e2)->
      begin
        test_local_types g lib e1 ty_lst;

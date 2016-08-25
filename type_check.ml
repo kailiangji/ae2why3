@@ -5,7 +5,7 @@ exception Not_found
 exception Not_Math_Expr
 exception Not_Math_Expr1
 
-type int_or_real = Is_Int | Is_Real
+type int_or_real_or_bool = Is_Int | Is_Real
 
 let rec find_in_local_vars id l =
   if List.mem id l.int_vars then Is_Int
@@ -31,7 +31,11 @@ let rec type_lexpr exp g l=
        with Not_found ->
 	 begin
 	   try find_in_global_vars id g
-	   with Not_found -> raise Not_Math_Expr
+	   with Not_found ->
+	     begin
+	       print_string id;
+	       raise Not_Math_Expr1
+	     end
 	 end
      end
   | PPapp (id, exp_lst) ->
