@@ -10,10 +10,13 @@
                  | _ -> raise Parsing.Parse_error) s;
     s
 
+  let replace_qmark id =
+    if String.get id 0 = '?' then
+      "qmark_" ^ (String.sub id 1 ((String.length id) - 1))
+    else id
 %}
 
 %token <string> IDENT
-%token <string> QM_IDENT
 %token <string> INTEGER
 %token <string> FLOAT
 %token <Num.num> NUM
@@ -341,25 +344,9 @@ list0_lexpr_sep_comma:
 ;
 
 list1_lexpr_sep_comma:
-| lexpr_or_dom                             { [$1] }
-| lexpr_or_dom COMMA list1_lexpr_sep_comma { $1 :: $3 }
+| lexpr                             { [$1] }
+| lexpr COMMA list1_lexpr_sep_comma { $1 :: $3 }
 ;
-
-lexpr_or_dom:
-| lexpr {$1}
-| lexpr IN sq bound COMMA bound sq
-    {{pp_desc = PPinInterval ($1, $3, $4, $6, $7)}}
-
-sq:
-| LEFTSQ {true}
-| RIGHTSQ {false}
-
-bound:
-| QM_IDENT {{pp_desc = PPvar $1}}
-| IDENT {{pp_desc = PPvar $1}}
-| INTEGER {{pp_desc = PPconst (ConstInt $1)}}
-| NUM {{pp_desc = PPconst (ConstReal $1)}}
-
 
 list2_lexpr_sep_comma:
 | lexpr COMMA lexpr                 { [$1; $3] }
@@ -417,7 +404,7 @@ list1_type_var_sep_comma:
 ;
 
 ident:
-| IDENT { $1 }
+| IDENT { replace_qmark $1 }
 ;
 
 list1_named_ident_sep_comma:

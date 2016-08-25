@@ -93,16 +93,17 @@ let alpha = ['a'-'z' 'A'-'Z']
 let letter = alpha | '_'
 let digit = ['0'-'9']
 let hexdigit = ['0'-'9''a'-'f''A'-'F']
-let ident = letter (letter | digit | '?' | '\'')*
+let ident = (letter | '?')(letter | digit | '?' | '\'')*
 
 rule token = parse
   | newline
       { newline lexbuf; token lexbuf }
   | space+
       { token lexbuf }
-  | '?' (ident ?) as id
-      { QM_IDENT id }
-
+  (*| '?' (ident ?) as id
+    { QM_IDENT id }*)
+  | '#' '|' (([^ '|'])+ as id) '|' '#'
+      {IDENT id}
   | ident as id (* identifiers *)
       { try
 	  let k = Hashtbl.find keywords id in

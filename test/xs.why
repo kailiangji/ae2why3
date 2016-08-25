@@ -18,375 +18,499 @@ logic x : int
 logic x_count : int -> int
  
 axiom ax_1:
-(let v_1 = (fmt0 + 1) in
-let v_0 = ((fmt1 - 2) - fmt0) in
-let v_8 = format(0) in
- (let v_18 = (v_8 = percent) in
-let v_9 = format(1) in
-(let v_22 = (v_9 = percent)  in
-let v_19 = (v_9 = s) in
-let v_57 = (v_9 = x) in
-let v_10 = format(2) in
- (let v_26 = (v_10 = percent) in
-let v_23 = (v_10 = s) in
-let v_60 = (v_10 = x) in
-let v_11 = format(3) in
- (let v_30 = (v_11 = percent) in
-let v_27 = (v_11 = s) in
-let v_63 = (v_11 = x) in
-let v_12 = format(4) in
- (let v_34 = (v_12 = percent) in
-let v_31 = (v_12 = s) in
-let v_66 = (v_12 = x) in
-let v_13 = format(5) in
- (let v_38 = (v_13 = percent) in
-let v_35 = (v_13 = s) in
-let v_69 = (v_13 = x) in
-let v_14 = format(6) in
- (let v_42 = (v_14 = percent) in
-let v_39 = (v_14 = s) in
-let v_72 = (v_14 = x) in
-let v_15 = format(7) in
- (let v_46 = (v_15 = percent) in
-let v_43 = (v_15 = s) in
-let v_75 = (v_15 = x) in
-let v_16 = format(8) in
- (let v_50 = (v_16 = percent) in
-let v_47 = (v_16 = s) in
-let v_78 = (v_16 = x) in
-let v_17 = format(9) in
- (let v_54 = (v_17 = percent) in
-let v_51 = (v_17 = s) in
-let v_81 = (v_17 = x) in
-let v_20 = (v_18 and v_19) in
-let v_21 = s_count(0) in
-let v_24 = (v_22 and v_23) in
-let v_25 = s_count(1) in
-let v_28 = (v_26 and v_27) in
-let v_29 = s_count(2) in
-let v_32 = (v_30 and v_31) in
-let v_33 = s_count(3) in
-let v_36 = (v_34 and v_35) in
-let v_37 = s_count(4) in
-let v_40 = (v_38 and v_39) in
-let v_41 = s_count(5) in
-let v_44 = (v_42 and v_43) in
-let v_45 = s_count(6) in
-let v_48 = (v_46 and v_47) in
-let v_49 = s_count(7) in
- (let v_52 = (v_50 and v_51) in
-let v_53 = s_count(8) in
-let v_84 = format(10) in
- (let v_55 = (v_54 and (v_84 = s)) in
-let v_56 = s_count(9) in
-let v_58 = (v_18 and v_57) in
-let v_59 = x_count(0) in
-let v_61 = (v_22 and v_60) in
-let v_62 = x_count(1) in
-let v_64 = (v_26 and v_63) in
-let v_65 = x_count(2) in
-let v_67 = (v_30 and v_66) in
-let v_68 = x_count(3) in
-let v_70 = (v_34 and v_69) in
-let v_71 = x_count(4) in
-let v_73 = (v_38 and v_72) in
-let v_74 = x_count(5) in
-let v_76 = (v_42 and v_75) in
-let v_77 = x_count(6) in
-let v_79 = (v_46 and v_78) in
-let v_80 = x_count(7) in
-let v_82 = (v_50 and v_81) in
-let v_83 = x_count(8) in
-let v_85 = (v_54 and (v_84 = x)) in
-let v_86 = x_count(9) in
-let v_2 = (fmt0 + 0) in
-let v_3 = (fmt0 + 2) in
-let v_4 = (fmt0 + 3) in
-let v_5 = (fmt0 + 4) in
-let v_6 = (fmt0 + 5) in
-let v_7 = (fmt0 + 6) in
+(let ?v_1 = (fmt0 + 1)
+ in
+let ?v_0 = ((fmt1 - 2)
+ - fmt0)
+ in
+let ?v_8 = format(0) in
+ (let ?v_18 = (?v_8 = percent)
+ in
+let ?v_9 = format(1) in
+ (let ?v_22 = (?v_9 = percent)
+ in
+let ?v_19 = (?v_9 = s)
+ in
+let ?v_57 = (?v_9 = x)
+ in
+let ?v_10 = format(2) in
+ (let ?v_26 = (?v_10 = percent)
+ in
+let ?v_23 = (?v_10 = s)
+ in
+let ?v_60 = (?v_10 = x)
+ in
+let ?v_11 = format(3) in
+ (let ?v_30 = (?v_11 = percent)
+ in
+let ?v_27 = (?v_11 = s)
+ in
+let ?v_63 = (?v_11 = x)
+ in
+let ?v_12 = format(4) in
+ (let ?v_34 = (?v_12 = percent)
+ in
+let ?v_31 = (?v_12 = s)
+ in
+let ?v_66 = (?v_12 = x)
+ in
+let ?v_13 = format(5) in
+ (let ?v_38 = (?v_13 = percent)
+ in
+let ?v_35 = (?v_13 = s)
+ in
+let ?v_69 = (?v_13 = x)
+ in
+let ?v_14 = format(6) in
+ (let ?v_42 = (?v_14 = percent)
+ in
+let ?v_39 = (?v_14 = s)
+ in
+let ?v_72 = (?v_14 = x)
+ in
+let ?v_15 = format(7) in
+ (let ?v_46 = (?v_15 = percent)
+ in
+let ?v_43 = (?v_15 = s)
+ in
+let ?v_75 = (?v_15 = x)
+ in
+let ?v_16 = format(8) in
+ (let ?v_50 = (?v_16 = percent)
+ in
+let ?v_47 = (?v_16 = s)
+ in
+let ?v_78 = (?v_16 = x)
+ in
+let ?v_17 = format(9) in
+ (let ?v_54 = (?v_17 = percent)
+ in
+let ?v_51 = (?v_17 = s)
+ in
+let ?v_81 = (?v_17 = x)
+ in
+let ?v_20 = (?v_18 and ?v_19)
+ in
+let ?v_21 = s_count(0) in
+let ?v_24 = (?v_22 and ?v_23)
+ in
+let ?v_25 = s_count(1) in
+let ?v_28 = (?v_26 and ?v_27)
+ in
+let ?v_29 = s_count(2) in
+let ?v_32 = (?v_30 and ?v_31)
+ in
+let ?v_33 = s_count(3) in
+let ?v_36 = (?v_34 and ?v_35)
+ in
+let ?v_37 = s_count(4) in
+let ?v_40 = (?v_38 and ?v_39)
+ in
+let ?v_41 = s_count(5) in
+let ?v_44 = (?v_42 and ?v_43)
+ in
+let ?v_45 = s_count(6) in
+let ?v_48 = (?v_46 and ?v_47)
+ in
+let ?v_49 = s_count(7) in
+ (let ?v_52 = (?v_50 and ?v_51)
+ in
+let ?v_53 = s_count(8) in
+let ?v_84 = format(10) in
+ (let ?v_55 = (?v_54 and (?v_84 = s)
+)
+ in
+let ?v_56 = s_count(9) in
+let ?v_58 = (?v_18 and ?v_57)
+ in
+let ?v_59 = x_count(0) in
+let ?v_61 = (?v_22 and ?v_60)
+ in
+let ?v_62 = x_count(1) in
+let ?v_64 = (?v_26 and ?v_63)
+ in
+let ?v_65 = x_count(2) in
+let ?v_67 = (?v_30 and ?v_66)
+ in
+let ?v_68 = x_count(3) in
+let ?v_70 = (?v_34 and ?v_69)
+ in
+let ?v_71 = x_count(4) in
+let ?v_73 = (?v_38 and ?v_72)
+ in
+let ?v_74 = x_count(5) in
+let ?v_76 = (?v_42 and ?v_75)
+ in
+let ?v_77 = x_count(6) in
+let ?v_79 = (?v_46 and ?v_78)
+ in
+let ?v_80 = x_count(7) in
+let ?v_82 = (?v_50 and ?v_81)
+ in
+let ?v_83 = x_count(8) in
+let ?v_85 = (?v_54 and (?v_84 = x)
+)
+ in
+let ?v_86 = x_count(9) in
+let ?v_2 = (fmt0 + 0)
+ in
+let ?v_3 = (fmt0 + 2)
+ in
+let ?v_4 = (fmt0 + 3)
+ in
+let ?v_5 = (fmt0 + 4)
+ in
+let ?v_6 = (fmt0 + 5)
+ in
+let ?v_7 = (fmt0 + 6)
+ in
  not((((((((((((((distance = 10)
- and (fmt_length = 10))
- and (adr_lo = 3))
- and (adr_medlo = 4))
- and (adr_medhi = 5))
- and (adr_hi = 6))
+ and (fmt_length = 10)
+)
+ and (adr_lo = 3)
+)
+ and (adr_medlo = 4)
+)
+ and (adr_medhi = 5)
+)
+ and (adr_hi = 6)
+)
  and (((percent = 37)
- and (s = 115))
- and (x = 120)))
+ and (s = 115)
+)
+ and (x = 120)
+)
+)
  and ((((((((fmt0 = 0)
- and (arg0 = (fmt0 - distance)))
- and (arg1 >= fmt0))
- and (fmt1 < (fmt0 + (fmt_length - 1))))
- and (fmt1 > v_1))
- and (arg1 >= (arg0 + distance)))
- and (arg1 < (arg0 + (distance + (fmt_length - 4)))))
- and (arg1 = ((arg0 + (4 * s_count(v_0)))
- + (4 * x_count(v_0))))))
- and (((((((((((fmt1 = v_2)
- or (fmt1 = v_1))
- or (fmt1 = v_3))
- or (fmt1 = v_4))
- or (fmt1 = v_5))
- or (fmt1 = v_6))
- or (fmt1 = v_7))
- or (fmt1 = (fmt0 + 7)))
- or (fmt1 = (fmt0 + 8)))
- or (fmt1 = (fmt0 + 9)))
- and (((((((arg1 = v_2)
- or (arg1 = v_1))
- or (arg1 = v_3))
- or (arg1 = v_4))
- or (arg1 = v_5))
- or (arg1 = v_6))
- or (arg1 = v_7))))
- and ((((((((((((((((v_18 or (v_8 = s))
- or (v_8 = x))
- or (v_8 = 3))
- or (v_8 = 4))
- or (v_8 = 5))
- or (v_8 = 6))
- or (v_8 = 255))
- and (((((((v_22 or v_19)
- or v_57)
- or (v_9 = 3))
- or (v_9 = 4))
- or (v_9 = 5))
- or (v_9 = 6))
- or (v_9 = 255)))
- and (((((((v_26 or v_23)
- or v_60)
- or (v_10 = 3))
- or (v_10 = 4))
- or (v_10 = 5))
- or (v_10 = 6))
- or (v_10 = 255)))
- and (((((((v_30 or v_27)
- or v_63)
- or (v_11 = 3)
+ and (arg0 = (fmt0 - distance)
 )
- or (v_11 = 4)
 )
- or (v_11 = 5)
+ and (arg1 >= fmt0)
 )
- or (v_11 = 6)
+ and (fmt1 < (fmt0 + (fmt_length - 1)
 )
- or (v_11 = 255)
 )
 )
- and (((((((v_34 or v_31)
- or v_66)
- or (v_12 = 3)
+ and (fmt1 > ?v_1)
 )
- or (v_12 = 4)
+ and (arg1 >= (arg0 + distance)
 )
- or (v_12 = 5)
 )
- or (v_12 = 6)
+ and (arg1 < (arg0 + (distance + (fmt_length - 4)
 )
- or (v_12 = 255)
 )
 )
- and (((((((v_38 or v_35)
- or v_69)
- or (v_13 = 3)
 )
- or (v_13 = 4)
+ and (arg1 = ((arg0 + (4 * s_count(?v_0))
 )
- or (v_13 = 5)
+ + (4 * x_count(?v_0))
 )
- or (v_13 = 6)
 )
- or (v_13 = 255)
 )
 )
- and (((((((v_42 or v_39)
- or v_72)
- or (v_14 = 3)
+ and (((((((((((fmt1 = ?v_2)
+ or (fmt1 = ?v_1)
 )
- or (v_14 = 4)
+ or (fmt1 = ?v_3)
 )
- or (v_14 = 5)
+ or (fmt1 = ?v_4)
 )
- or (v_14 = 6)
+ or (fmt1 = ?v_5)
 )
- or (v_14 = 255)
+ or (fmt1 = ?v_6)
 )
+ or (fmt1 = ?v_7)
 )
- and (((((((v_46 or v_43)
- or v_75)
- or (v_15 = 3)
+ or (fmt1 = (fmt0 + 7)
 )
- or (v_15 = 4)
 )
- or (v_15 = 5)
+ or (fmt1 = (fmt0 + 8)
 )
- or (v_15 = 6)
 )
- or (v_15 = 255)
+ or (fmt1 = (fmt0 + 9)
 )
 )
- and (((((((v_50 or v_47)
- or v_78)
- or (v_16 = 3)
+ and (((((((arg1 = ?v_2)
+ or (arg1 = ?v_1)
 )
- or (v_16 = 4)
+ or (arg1 = ?v_3)
 )
- or (v_16 = 5)
+ or (arg1 = ?v_4)
 )
- or (v_16 = 6)
+ or (arg1 = ?v_5)
 )
- or (v_16 = 255)
+ or (arg1 = ?v_6)
 )
+ or (arg1 = ?v_7)
 )
- and (((((((v_54 or v_51)
- or v_81)
- or (v_17 = 3)
 )
- or (v_17 = 4)
 )
- or (v_17 = 5)
+ and ((((((((((((((((?v_18 or (?v_8 = s)
 )
- or (v_17 = 6)
+ or (?v_8 = x)
 )
- or (v_17 = 255)
+ or (?v_8 = 3)
 )
+ or (?v_8 = 4)
 )
+ or (?v_8 = 5)
 )
- and (((((((((((v_20 -> (v_21 = 1)
+ or (?v_8 = 6)
 )
- and (not(v_20) -> (v_21 = 0)
+ or (?v_8 = 255)
 )
+ and (((((((?v_22 or ?v_19)
+ or ?v_57)
+ or (?v_9 = 3)
 )
- and ((v_24 -> (v_25 = (v_21 + 1)
+ or (?v_9 = 4)
 )
+ or (?v_9 = 5)
 )
- and (not(v_24) -> (v_25 = v_21)
+ or (?v_9 = 6)
 )
+ or (?v_9 = 255)
 )
 )
- and ((v_28 -> (v_29 = (v_25 + 1)
+ and (((((((?v_26 or ?v_23)
+ or ?v_60)
+ or (?v_10 = 3)
 )
+ or (?v_10 = 4)
 )
- and (not(v_28) -> (v_29 = v_25)
+ or (?v_10 = 5)
 )
+ or (?v_10 = 6)
 )
+ or (?v_10 = 255)
 )
- and ((v_32 -> (v_33 = (v_29 + 1)
 )
+ and (((((((?v_30 or ?v_27)
+ or ?v_63)
+ or (?v_11 = 3)
 )
- and (not(v_32) -> (v_33 = v_29)
+ or (?v_11 = 4)
 )
+ or (?v_11 = 5)
 )
+ or (?v_11 = 6)
 )
- and ((v_36 -> (v_37 = (v_33 + 1)
+ or (?v_11 = 255)
 )
 )
- and (not(v_36) -> (v_37 = v_33)
+ and (((((((?v_34 or ?v_31)
+ or ?v_66)
+ or (?v_12 = 3)
 )
+ or (?v_12 = 4)
 )
+ or (?v_12 = 5)
 )
- and ((v_40 -> (v_41 = (v_37 + 1)
+ or (?v_12 = 6)
 )
+ or (?v_12 = 255)
 )
- and (not(v_40) -> (v_41 = v_37)
 )
+ and (((((((?v_38 or ?v_35)
+ or ?v_69)
+ or (?v_13 = 3)
 )
+ or (?v_13 = 4)
 )
- and ((v_44 -> (v_45 = (v_41 + 1)
+ or (?v_13 = 5)
 )
+ or (?v_13 = 6)
 )
- and (not(v_44) -> (v_45 = v_41)
+ or (?v_13 = 255)
 )
 )
+ and (((((((?v_42 or ?v_39)
+ or ?v_72)
+ or (?v_14 = 3)
 )
- and ((v_48 -> (v_49 = (v_45 + 1)
+ or (?v_14 = 4)
 )
+ or (?v_14 = 5)
 )
- and (not(v_48) -> (v_49 = v_45)
+ or (?v_14 = 6)
 )
+ or (?v_14 = 255)
 )
 )
- and ((v_52 -> (v_53 = (v_49 + 1)
+ and (((((((?v_46 or ?v_43)
+ or ?v_75)
+ or (?v_15 = 3)
 )
+ or (?v_15 = 4)
 )
- and (not(v_52) -> (v_53 = v_49)
+ or (?v_15 = 5)
 )
+ or (?v_15 = 6)
 )
+ or (?v_15 = 255)
 )
- and ((v_55 -> (v_56 = (v_53 + 1)
 )
+ and (((((((?v_50 or ?v_47)
+ or ?v_78)
+ or (?v_16 = 3)
 )
- and (not(v_55) -> (v_56 = v_53)
+ or (?v_16 = 4)
 )
+ or (?v_16 = 5)
 )
+ or (?v_16 = 6)
 )
+ or (?v_16 = 255)
 )
- and (((((((((((v_58 -> (v_59 = 1)
 )
- and (not(v_58) -> (v_59 = 0)
+ and (((((((?v_54 or ?v_51)
+ or ?v_81)
+ or (?v_17 = 3)
 )
+ or (?v_17 = 4)
 )
- and ((v_61 -> (v_62 = (v_59 + 1)
+ or (?v_17 = 5)
 )
+ or (?v_17 = 6)
 )
- and (not(v_61) -> (v_62 = v_59)
+ or (?v_17 = 255)
 )
 )
 )
- and ((v_64 -> (v_65 = (v_62 + 1)
+ and (((((((((((?v_20 -> (?v_21 = 1)
 )
+ and (not(?v_20) -> (?v_21 = 0)
 )
- and (not(v_64) -> (v_65 = v_62)
 )
+ and ((?v_24 -> (?v_25 = (?v_21 + 1)
 )
 )
- and ((v_67 -> (v_68 = (v_65 + 1)
+ and (not(?v_24) -> (?v_25 = ?v_21)
 )
 )
- and (not(v_67) -> (v_68 = v_65)
 )
+ and ((?v_28 -> (?v_29 = (?v_25 + 1)
 )
 )
- and ((v_70 -> (v_71 = (v_68 + 1)
+ and (not(?v_28) -> (?v_29 = ?v_25)
 )
 )
- and (not(v_70) -> (v_71 = v_68)
 )
+ and ((?v_32 -> (?v_33 = (?v_29 + 1)
 )
 )
- and ((v_73 -> (v_74 = (v_71 + 1)
+ and (not(?v_32) -> (?v_33 = ?v_29)
 )
 )
- and (not(v_73) -> (v_74 = v_71)
 )
+ and ((?v_36 -> (?v_37 = (?v_33 + 1)
 )
 )
- and ((v_76 -> (v_77 = (v_74 + 1)
+ and (not(?v_36) -> (?v_37 = ?v_33)
 )
 )
- and (not(v_76) -> (v_77 = v_74)
 )
+ and ((?v_40 -> (?v_41 = (?v_37 + 1)
 )
 )
- and ((v_79 -> (v_80 = (v_77 + 1)
+ and (not(?v_40) -> (?v_41 = ?v_37)
 )
 )
- and (not(v_79) -> (v_80 = v_77)
 )
+ and ((?v_44 -> (?v_45 = (?v_41 + 1)
 )
 )
- and ((v_82 -> (v_83 = (v_80 + 1)
+ and (not(?v_44) -> (?v_45 = ?v_41)
 )
 )
- and (not(v_82) -> (v_83 = v_80)
 )
+ and ((?v_48 -> (?v_49 = (?v_45 + 1)
 )
 )
- and ((v_85 -> (v_86 = (v_83 + 1)
+ and (not(?v_48) -> (?v_49 = ?v_45)
 )
 )
- and (not(v_85) -> (v_86 = v_83)
+)
+ and ((?v_52 -> (?v_53 = (?v_49 + 1)
+)
+)
+ and (not(?v_52) -> (?v_53 = ?v_49)
+)
+)
+)
+ and ((?v_55 -> (?v_56 = (?v_53 + 1)
+)
+)
+ and (not(?v_55) -> (?v_56 = ?v_53)
+)
+)
+)
+)
+ and (((((((((((?v_58 -> (?v_59 = 1)
+)
+ and (not(?v_58) -> (?v_59 = 0)
+)
+)
+ and ((?v_61 -> (?v_62 = (?v_59 + 1)
+)
+)
+ and (not(?v_61) -> (?v_62 = ?v_59)
+)
+)
+)
+ and ((?v_64 -> (?v_65 = (?v_62 + 1)
+)
+)
+ and (not(?v_64) -> (?v_65 = ?v_62)
+)
+)
+)
+ and ((?v_67 -> (?v_68 = (?v_65 + 1)
+)
+)
+ and (not(?v_67) -> (?v_68 = ?v_65)
+)
+)
+)
+ and ((?v_70 -> (?v_71 = (?v_68 + 1)
+)
+)
+ and (not(?v_70) -> (?v_71 = ?v_68)
+)
+)
+)
+ and ((?v_73 -> (?v_74 = (?v_71 + 1)
+)
+)
+ and (not(?v_73) -> (?v_74 = ?v_71)
+)
+)
+)
+ and ((?v_76 -> (?v_77 = (?v_74 + 1)
+)
+)
+ and (not(?v_76) -> (?v_77 = ?v_74)
+)
+)
+)
+ and ((?v_79 -> (?v_80 = (?v_77 + 1)
+)
+)
+ and (not(?v_79) -> (?v_80 = ?v_77)
+)
+)
+)
+ and ((?v_82 -> (?v_83 = (?v_80 + 1)
+)
+)
+ and (not(?v_82) -> (?v_83 = ?v_80)
+)
+)
+)
+ and ((?v_85 -> (?v_86 = (?v_83 + 1)
+)
+)
+ and (not(?v_85) -> (?v_86 = ?v_83)
 )
 )
 )
