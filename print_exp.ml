@@ -1,6 +1,5 @@
 open Parsed
-open Printf
-(*open Format*)
+open Format
 open Type_check
 
 let rec print_ppure_type fmt ty =

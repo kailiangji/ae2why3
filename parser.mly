@@ -2,13 +2,29 @@
 
   open Parsed
   open Parsing
+(*
+  let loc () = (symbol_start_pos (), symbol_end_pos ())
+  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
+  let loc_ij i j = (rhs_start_pos i, rhs_end_pos j)
 
+  let mk_ppl loc d = { pp_loc = loc; pp_desc = d }
+  let mk_pp d = mk_ppl (loc ()) d
+  let mk_pp_i i d = mk_ppl (loc_i i) d
+
+  let infix_ppl loc a i b = mk_ppl loc (PPinfix (a, i, b))
+  let infix_pp a i b = infix_ppl (loc ()) a i b
+
+  let prefix_ppl loc p a = mk_ppl loc (PPprefix (p, a))
+  let prefix_pp p a = prefix_ppl (loc ()) p a
+*)
   let check_binary_mode s =
-    String.iter (fun x ->
-                 match x with
-                 | '0' | '1' -> ()
-                 | _ -> raise Parsing.Parse_error) s;
-    s
+    begin
+      String.iter (fun x ->
+	match x with
+	| '0' | '1' -> ()
+	| _ -> raise Parsing.Parse_error) s;
+      s
+    end
 
   let replace_qmark id =
     if String.get id 0 = '?' then
