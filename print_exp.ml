@@ -1063,7 +1063,6 @@ let rec test_local_types g l lib expr ty_lst =
 		lib.bool_lib <- true;
 		ty_lst := "bool_lib" :: !ty_lst
 	      end
-	 | _ -> assert false
        end;
        test_local_types g l lib e1 ty_lst;
        test_local_types g l lib e2 ty_lst

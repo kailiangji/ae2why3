@@ -1,4 +1,6 @@
 open Parsing
+open Options
+open Loc
 open Format
 open Parsed
 open Type_check
@@ -6,18 +8,6 @@ open Print_exp
 
 exception Input_Error
 
-let name_file hd ori_file =
-  let n = String.length ori_file in
-  let j = ref (n-1) in
-  while !j <> 0 && String.get ori_file !j <> '/' do
-    j := !j - 1
-  done;
-  if !j = 0 then
-    hd ^ ori_file
-  else
-  (String.sub ori_file 0 (!j + 1))
-  ^ hd ^ (String.sub ori_file (!j+1) (n-1-(!j)))
-    
 let name_theory ori_file =
   let n = String.length ori_file in
   let j = ref (n-1) in
@@ -59,15 +49,11 @@ let funs_to_remove =
 
 let preds_to_remove =
   ["no_overflow";"no_overflow1"]
-    
+
 let () =
-  let ori_file = Sys.argv.(1) in
+  let ori_file = get_file() in
   let chan_in = open_in ori_file in
-  let goal_file =
-    if Array.length Sys.argv = 2 then
-      name_file "why3_" ori_file
-    else Sys.argv.(2)
-  in
+  let goal_file = output_file() in
   let chan_out = open_out goal_file in
   let fmt = formatter_of_out_channel chan_out in
   let lexbuf = Lexing.from_channel chan_in in
