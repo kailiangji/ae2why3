@@ -1,0 +1,11 @@
+theory TEST_LEQ
+
+
+use import int.Int
+
+goal tt:
+   (forall x : int.
+   (5 <= x <= 10 ->
+    x >= 3))
+
+end

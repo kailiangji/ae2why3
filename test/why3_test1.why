@@ -1,0 +1,26 @@
+theory TEST1
+
+
+type pointer 'a 
+
+type pset 'a 
+
+use import int.Int
+
+use import bool.Bool
+
+function p int : bool
+
+function q int int : bool
+
+axiom a:
+   (forall x : int.
+   ((p x) <-> (exists i : int.
+   (exists r : int.
+   (q r i)))))
+
+goal g_3:
+   ((q 1 2) ->
+    (p 4))
+
+end

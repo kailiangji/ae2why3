@@ -1,0 +1,37 @@
+theory ARRAY_RND_HARD_MOD
+
+
+use import real.RealInfix
+
+function abs_ real : real
+
+use import real.Abs as RA
+
+axiom abs_defn: forall x : real[(RA.abs x)].
+   (((x >=. 0.) ->
+    ((RA.abs x) = x)) /\ ((x <=. 0.) ->
+    ((RA.abs x) = (-.x))))
+
+axiom abs_abs: forall x : real[(abs_ x)].
+   ((RA.abs x) = (abs_ x))
+
+use import int.Int
+
+use import real.FromInt
+
+use import floating_point.Rounding
+
+use import floating_point.Single as S
+
+use import floating_point.Double as D
+
+goal WP_parameter_sum1:
+   forall s s1 r : real.
+   forall i : int.
+   (((0 <= i<=  99) ->
+    (((abs_ (s -. ((from_int i) *. 0.01))) <=. (0.0001 *. (from_int i))) ->
+    ((r = (S.round NearestTiesToEven 0.01)) ->
+    ((s1 = (S.round NearestTiesToEven (s +. r))) ->
+    ((abs_ (s1 -. ((from_int (i + 1)) *. 0.01))) <=. (0.0001 *. (from_int (i + 1))))))))
+
+end

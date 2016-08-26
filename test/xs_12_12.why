@@ -1,0 +1,628 @@
+logic arg0 : int 
+logic arg1 : int 
+logic fmt0 : int 
+logic fmt1 : int 
+logic distance : int 
+logic fmt_length : int 
+logic adr_lo : int 
+logic adr_medlo : int 
+logic adr_medhi : int 
+logic adr_hi : int 
+logic format : int -> int
+ 
+logic percent : int 
+logic s : int 
+logic s_count : int -> int
+ 
+logic x : int 
+logic x_count : int -> int
+ 
+axiom ax_1:
+(let ?v_1 = (fmt0 + 1)
+ in
+let ?v_0 = ((fmt1 - 2)
+ - fmt0)
+ in
+let ?v_10 = format(0) in
+ (let ?v_22 = (?v_10 = percent)
+ in
+let ?v_11 = format(1) in
+ (let ?v_26 = (?v_11 = percent)
+ in
+let ?v_23 = (?v_11 = s)
+ in
+let ?v_69 = (?v_11 = x)
+ in
+let ?v_12 = format(2) in
+ (let ?v_30 = (?v_12 = percent)
+ in
+let ?v_27 = (?v_12 = s)
+ in
+let ?v_72 = (?v_12 = x)
+ in
+let ?v_13 = format(3) in
+ (let ?v_34 = (?v_13 = percent)
+ in
+let ?v_31 = (?v_13 = s)
+ in
+let ?v_75 = (?v_13 = x)
+ in
+let ?v_14 = format(4) in
+ (let ?v_38 = (?v_14 = percent)
+ in
+let ?v_35 = (?v_14 = s)
+ in
+let ?v_78 = (?v_14 = x)
+ in
+let ?v_15 = format(5) in
+ (let ?v_42 = (?v_15 = percent)
+ in
+let ?v_39 = (?v_15 = s)
+ in
+let ?v_81 = (?v_15 = x)
+ in
+let ?v_16 = format(6) in
+ (let ?v_46 = (?v_16 = percent)
+ in
+let ?v_43 = (?v_16 = s)
+ in
+let ?v_84 = (?v_16 = x)
+ in
+let ?v_17 = format(7) in
+ (let ?v_50 = (?v_17 = percent)
+ in
+let ?v_47 = (?v_17 = s)
+ in
+let ?v_87 = (?v_17 = x)
+ in
+let ?v_18 = format(8) in
+ (let ?v_54 = (?v_18 = percent)
+ in
+let ?v_51 = (?v_18 = s)
+ in
+let ?v_90 = (?v_18 = x)
+ in
+let ?v_19 = format(9) in
+ (let ?v_58 = (?v_19 = percent)
+ in
+let ?v_55 = (?v_19 = s)
+ in
+let ?v_93 = (?v_19 = x)
+ in
+let ?v_20 = format(10) in
+ (let ?v_62 = (?v_20 = percent)
+ in
+let ?v_59 = (?v_20 = s)
+ in
+let ?v_96 = (?v_20 = x)
+ in
+let ?v_21 = format(11) in
+ (let ?v_66 = (?v_21 = percent)
+ in
+let ?v_63 = (?v_21 = s)
+ in
+let ?v_99 = (?v_21 = x)
+ in
+let ?v_24 = (?v_22 and ?v_23)
+ in
+let ?v_25 = s_count(0) in
+let ?v_28 = (?v_26 and ?v_27)
+ in
+let ?v_29 = s_count(1) in
+let ?v_32 = (?v_30 and ?v_31)
+ in
+let ?v_33 = s_count(2) in
+let ?v_36 = (?v_34 and ?v_35)
+ in
+let ?v_37 = s_count(3) in
+let ?v_40 = (?v_38 and ?v_39)
+ in
+let ?v_41 = s_count(4) in
+let ?v_44 = (?v_42 and ?v_43)
+ in
+let ?v_45 = s_count(5) in
+let ?v_48 = (?v_46 and ?v_47)
+ in
+let ?v_49 = s_count(6) in
+let ?v_52 = (?v_50 and ?v_51)
+ in
+let ?v_53 = s_count(7) in
+let ?v_56 = (?v_54 and ?v_55)
+ in
+let ?v_57 = s_count(8) in
+let ?v_60 = (?v_58 and ?v_59)
+ in
+let ?v_61 = s_count(9) in
+ (let ?v_64 = (?v_62 and ?v_63)
+ in
+let ?v_65 = s_count(10) in
+let ?v_102 = format(12) in
+ (let ?v_67 = (?v_66 and (?v_102 = s)
+)
+ in
+let ?v_68 = s_count(11) in
+let ?v_70 = (?v_22 and ?v_69)
+ in
+let ?v_71 = x_count(0) in
+let ?v_73 = (?v_26 and ?v_72)
+ in
+let ?v_74 = x_count(1) in
+let ?v_76 = (?v_30 and ?v_75)
+ in
+let ?v_77 = x_count(2) in
+let ?v_79 = (?v_34 and ?v_78)
+ in
+let ?v_80 = x_count(3) in
+let ?v_82 = (?v_38 and ?v_81)
+ in
+let ?v_83 = x_count(4) in
+let ?v_85 = (?v_42 and ?v_84)
+ in
+let ?v_86 = x_count(5) in
+let ?v_88 = (?v_46 and ?v_87)
+ in
+let ?v_89 = x_count(6) in
+let ?v_91 = (?v_50 and ?v_90)
+ in
+let ?v_92 = x_count(7) in
+let ?v_94 = (?v_54 and ?v_93)
+ in
+let ?v_95 = x_count(8) in
+let ?v_97 = (?v_58 and ?v_96)
+ in
+let ?v_98 = x_count(9) in
+let ?v_100 = (?v_62 and ?v_99)
+ in
+let ?v_101 = x_count(10) in
+let ?v_103 = (?v_66 and (?v_102 = x)
+)
+ in
+let ?v_104 = x_count(11) in
+let ?v_2 = (fmt0 + 0)
+ in
+let ?v_3 = (fmt0 + 2)
+ in
+let ?v_4 = (fmt0 + 3)
+ in
+let ?v_5 = (fmt0 + 4)
+ in
+let ?v_6 = (fmt0 + 5)
+ in
+let ?v_7 = (fmt0 + 6)
+ in
+let ?v_8 = (fmt0 + 7)
+ in
+let ?v_9 = (fmt0 + 8)
+ in
+ not((((((((((((((distance = 12)
+ and (fmt_length = 12)
+)
+ and (adr_lo = 3)
+)
+ and (adr_medlo = 4)
+)
+ and (adr_medhi = 5)
+)
+ and (adr_hi = 6)
+)
+ and (((percent = 37)
+ and (s = 115)
+)
+ and (x = 120)
+)
+)
+ and ((((((((fmt0 = 0)
+ and (arg0 = (fmt0 - distance)
+)
+)
+ and (arg1 >= fmt0)
+)
+ and (fmt1 < (fmt0 + (fmt_length - 1)
+)
+)
+)
+ and (fmt1 > ?v_1)
+)
+ and (arg1 >= (arg0 + distance)
+)
+)
+ and (arg1 < (arg0 + (distance + (fmt_length - 4)
+)
+)
+)
+)
+ and (arg1 = ((arg0 + (4 * s_count(?v_0))
+)
+ + (4 * x_count(?v_0))
+)
+)
+)
+)
+ and (((((((((((((fmt1 = ?v_2)
+ or (fmt1 = ?v_1)
+)
+ or (fmt1 = ?v_3)
+)
+ or (fmt1 = ?v_4)
+)
+ or (fmt1 = ?v_5)
+)
+ or (fmt1 = ?v_6)
+)
+ or (fmt1 = ?v_7)
+)
+ or (fmt1 = ?v_8)
+)
+ or (fmt1 = ?v_9)
+)
+ or (fmt1 = (fmt0 + 9)
+)
+)
+ or (fmt1 = (fmt0 + 10)
+)
+)
+ or (fmt1 = (fmt0 + 11)
+)
+)
+ and (((((((((arg1 = ?v_2)
+ or (arg1 = ?v_1)
+)
+ or (arg1 = ?v_3)
+)
+ or (arg1 = ?v_4)
+)
+ or (arg1 = ?v_5)
+)
+ or (arg1 = ?v_6)
+)
+ or (arg1 = ?v_7)
+)
+ or (arg1 = ?v_8)
+)
+ or (arg1 = ?v_9)
+)
+)
+)
+ and ((((((((((((((((((?v_22 or (?v_10 = s)
+)
+ or (?v_10 = x)
+)
+ or (?v_10 = 3)
+)
+ or (?v_10 = 4)
+)
+ or (?v_10 = 5)
+)
+ or (?v_10 = 6)
+)
+ or (?v_10 = 255)
+)
+ and (((((((?v_26 or ?v_23)
+ or ?v_69)
+ or (?v_11 = 3)
+)
+ or (?v_11 = 4)
+)
+ or (?v_11 = 5)
+)
+ or (?v_11 = 6)
+)
+ or (?v_11 = 255)
+)
+)
+ and (((((((?v_30 or ?v_27)
+ or ?v_72)
+ or (?v_12 = 3)
+)
+ or (?v_12 = 4)
+)
+ or (?v_12 = 5)
+)
+ or (?v_12 = 6)
+)
+ or (?v_12 = 255)
+)
+)
+ and (((((((?v_34 or ?v_31)
+ or ?v_75)
+ or (?v_13 = 3)
+)
+ or (?v_13 = 4)
+)
+ or (?v_13 = 5)
+)
+ or (?v_13 = 6)
+)
+ or (?v_13 = 255)
+)
+)
+ and (((((((?v_38 or ?v_35)
+ or ?v_78)
+ or (?v_14 = 3)
+)
+ or (?v_14 = 4)
+)
+ or (?v_14 = 5)
+)
+ or (?v_14 = 6)
+)
+ or (?v_14 = 255)
+)
+)
+ and (((((((?v_42 or ?v_39)
+ or ?v_81)
+ or (?v_15 = 3)
+)
+ or (?v_15 = 4)
+)
+ or (?v_15 = 5)
+)
+ or (?v_15 = 6)
+)
+ or (?v_15 = 255)
+)
+)
+ and (((((((?v_46 or ?v_43)
+ or ?v_84)
+ or (?v_16 = 3)
+)
+ or (?v_16 = 4)
+)
+ or (?v_16 = 5)
+)
+ or (?v_16 = 6)
+)
+ or (?v_16 = 255)
+)
+)
+ and (((((((?v_50 or ?v_47)
+ or ?v_87)
+ or (?v_17 = 3)
+)
+ or (?v_17 = 4)
+)
+ or (?v_17 = 5)
+)
+ or (?v_17 = 6)
+)
+ or (?v_17 = 255)
+)
+)
+ and (((((((?v_54 or ?v_51)
+ or ?v_90)
+ or (?v_18 = 3)
+)
+ or (?v_18 = 4)
+)
+ or (?v_18 = 5)
+)
+ or (?v_18 = 6)
+)
+ or (?v_18 = 255)
+)
+)
+ and (((((((?v_58 or ?v_55)
+ or ?v_93)
+ or (?v_19 = 3)
+)
+ or (?v_19 = 4)
+)
+ or (?v_19 = 5)
+)
+ or (?v_19 = 6)
+)
+ or (?v_19 = 255)
+)
+)
+ and (((((((?v_62 or ?v_59)
+ or ?v_96)
+ or (?v_20 = 3)
+)
+ or (?v_20 = 4)
+)
+ or (?v_20 = 5)
+)
+ or (?v_20 = 6)
+)
+ or (?v_20 = 255)
+)
+)
+ and (((((((?v_66 or ?v_63)
+ or ?v_99)
+ or (?v_21 = 3)
+)
+ or (?v_21 = 4)
+)
+ or (?v_21 = 5)
+)
+ or (?v_21 = 6)
+)
+ or (?v_21 = 255)
+)
+)
+)
+ and (((((((((((((?v_24 -> (?v_25 = 1)
+)
+ and (not(?v_24) -> (?v_25 = 0)
+)
+)
+ and ((?v_28 -> (?v_29 = (?v_25 + 1)
+)
+)
+ and (not(?v_28) -> (?v_29 = ?v_25)
+)
+)
+)
+ and ((?v_32 -> (?v_33 = (?v_29 + 1)
+)
+)
+ and (not(?v_32) -> (?v_33 = ?v_29)
+)
+)
+)
+ and ((?v_36 -> (?v_37 = (?v_33 + 1)
+)
+)
+ and (not(?v_36) -> (?v_37 = ?v_33)
+)
+)
+)
+ and ((?v_40 -> (?v_41 = (?v_37 + 1)
+)
+)
+ and (not(?v_40) -> (?v_41 = ?v_37)
+)
+)
+)
+ and ((?v_44 -> (?v_45 = (?v_41 + 1)
+)
+)
+ and (not(?v_44) -> (?v_45 = ?v_41)
+)
+)
+)
+ and ((?v_48 -> (?v_49 = (?v_45 + 1)
+)
+)
+ and (not(?v_48) -> (?v_49 = ?v_45)
+)
+)
+)
+ and ((?v_52 -> (?v_53 = (?v_49 + 1)
+)
+)
+ and (not(?v_52) -> (?v_53 = ?v_49)
+)
+)
+)
+ and ((?v_56 -> (?v_57 = (?v_53 + 1)
+)
+)
+ and (not(?v_56) -> (?v_57 = ?v_53)
+)
+)
+)
+ and ((?v_60 -> (?v_61 = (?v_57 + 1)
+)
+)
+ and (not(?v_60) -> (?v_61 = ?v_57)
+)
+)
+)
+ and ((?v_64 -> (?v_65 = (?v_61 + 1)
+)
+)
+ and (not(?v_64) -> (?v_65 = ?v_61)
+)
+)
+)
+ and ((?v_67 -> (?v_68 = (?v_65 + 1)
+)
+)
+ and (not(?v_67) -> (?v_68 = ?v_65)
+)
+)
+)
+)
+ and (((((((((((((?v_70 -> (?v_71 = 1)
+)
+ and (not(?v_70) -> (?v_71 = 0)
+)
+)
+ and ((?v_73 -> (?v_74 = (?v_71 + 1)
+)
+)
+ and (not(?v_73) -> (?v_74 = ?v_71)
+)
+)
+)
+ and ((?v_76 -> (?v_77 = (?v_74 + 1)
+)
+)
+ and (not(?v_76) -> (?v_77 = ?v_74)
+)
+)
+)
+ and ((?v_79 -> (?v_80 = (?v_77 + 1)
+)
+)
+ and (not(?v_79) -> (?v_80 = ?v_77)
+)
+)
+)
+ and ((?v_82 -> (?v_83 = (?v_80 + 1)
+)
+)
+ and (not(?v_82) -> (?v_83 = ?v_80)
+)
+)
+)
+ and ((?v_85 -> (?v_86 = (?v_83 + 1)
+)
+)
+ and (not(?v_85) -> (?v_86 = ?v_83)
+)
+)
+)
+ and ((?v_88 -> (?v_89 = (?v_86 + 1)
+)
+)
+ and (not(?v_88) -> (?v_89 = ?v_86)
+)
+)
+)
+ and ((?v_91 -> (?v_92 = (?v_89 + 1)
+)
+)
+ and (not(?v_91) -> (?v_92 = ?v_89)
+)
+)
+)
+ and ((?v_94 -> (?v_95 = (?v_92 + 1)
+)
+)
+ and (not(?v_94) -> (?v_95 = ?v_92)
+)
+)
+)
+ and ((?v_97 -> (?v_98 = (?v_95 + 1)
+)
+)
+ and (not(?v_97) -> (?v_98 = ?v_95)
+)
+)
+)
+ and ((?v_100 -> (?v_101 = (?v_98 + 1)
+)
+)
+ and (not(?v_100) -> (?v_101 = ?v_98)
+)
+)
+)
+ and ((?v_103 -> (?v_104 = (?v_101 + 1)
+)
+)
+ and (not(?v_103) -> (?v_104 = ?v_101)
+)
+)
+)
+)
+ -> (((((not((format(fmt1) = percent)
+) and (format((fmt1 + 1)
+) = s)
+)
+ and (format(arg1) = adr_lo)
+)
+ and (format((arg1 + 1)
+) = adr_medlo)
+)
+ and (format((arg1 + 2)
+) = adr_medhi)
+)
+ and (format((arg1 + 3)
+) = adr_hi)
+)
+)
+))))))))))))))))
+
+goal g_1: false

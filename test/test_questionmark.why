@@ -1,0 +1,4 @@
+
+goal tt:
+let ?v = 1 + 4 in
+?v+1 = 6

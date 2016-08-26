@@ -1,0 +1,200 @@
+theory XS_12_12
+
+
+use import int.Int
+
+constant arg0 : int
+
+constant arg1 : int
+
+constant fmt0 : int
+
+constant fmt1 : int
+
+constant distance : int
+
+constant fmt_length : int
+
+constant adr_lo : int
+
+constant adr_medlo : int
+
+constant adr_medhi : int
+
+constant adr_hi : int
+
+function format int : int
+
+constant percent : int
+
+constant s : int
+
+function s_count int : int
+
+constant x : int
+
+function x_count int : int
+
+use import bool.Bool
+
+axiom ax_1:
+   let qmark_v_1 = (fmt0 + 1) in
+   let qmark_v_0 = ((fmt1 - 2) - fmt0) in
+   let qmark_v_10 = (format 0) in
+   let qmark_v_22 = qmark_v_10 = percent in
+   let qmark_v_11 = (format 1) in
+   let qmark_v_26 = qmark_v_11 = percent in
+   let qmark_v_23 = qmark_v_11 = s in
+   let qmark_v_69 = qmark_v_11 = x in
+   let qmark_v_12 = (format 2) in
+   let qmark_v_30 = qmark_v_12 = percent in
+   let qmark_v_27 = qmark_v_12 = s in
+   let qmark_v_72 = qmark_v_12 = x in
+   let qmark_v_13 = (format 3) in
+   let qmark_v_34 = qmark_v_13 = percent in
+   let qmark_v_31 = qmark_v_13 = s in
+   let qmark_v_75 = qmark_v_13 = x in
+   let qmark_v_14 = (format 4) in
+   let qmark_v_38 = qmark_v_14 = percent in
+   let qmark_v_35 = qmark_v_14 = s in
+   let qmark_v_78 = qmark_v_14 = x in
+   let qmark_v_15 = (format 5) in
+   let qmark_v_42 = qmark_v_15 = percent in
+   let qmark_v_39 = qmark_v_15 = s in
+   let qmark_v_81 = qmark_v_15 = x in
+   let qmark_v_16 = (format 6) in
+   let qmark_v_46 = qmark_v_16 = percent in
+   let qmark_v_43 = qmark_v_16 = s in
+   let qmark_v_84 = qmark_v_16 = x in
+   let qmark_v_17 = (format 7) in
+   let qmark_v_50 = qmark_v_17 = percent in
+   let qmark_v_47 = qmark_v_17 = s in
+   let qmark_v_87 = qmark_v_17 = x in
+   let qmark_v_18 = (format 8) in
+   let qmark_v_54 = qmark_v_18 = percent in
+   let qmark_v_51 = qmark_v_18 = s in
+   let qmark_v_90 = qmark_v_18 = x in
+   let qmark_v_19 = (format 9) in
+   let qmark_v_58 = qmark_v_19 = percent in
+   let qmark_v_55 = qmark_v_19 = s in
+   let qmark_v_93 = qmark_v_19 = x in
+   let qmark_v_20 = (format 10) in
+   let qmark_v_62 = qmark_v_20 = percent in
+   let qmark_v_59 = qmark_v_20 = s in
+   let qmark_v_96 = qmark_v_20 = x in
+   let qmark_v_21 = (format 11) in
+   let qmark_v_66 = qmark_v_21 = percent in
+   let qmark_v_63 = qmark_v_21 = s in
+   let qmark_v_99 = qmark_v_21 = x in
+   let qmark_v_24 = (qmark_v_22 /\ qmark_v_23) in
+   let qmark_v_25 = (s_count 0) in
+   let qmark_v_28 = (qmark_v_26 /\ qmark_v_27) in
+   let qmark_v_29 = (s_count 1) in
+   let qmark_v_32 = (qmark_v_30 /\ qmark_v_31) in
+   let qmark_v_33 = (s_count 2) in
+   let qmark_v_36 = (qmark_v_34 /\ qmark_v_35) in
+   let qmark_v_37 = (s_count 3) in
+   let qmark_v_40 = (qmark_v_38 /\ qmark_v_39) in
+   let qmark_v_41 = (s_count 4) in
+   let qmark_v_44 = (qmark_v_42 /\ qmark_v_43) in
+   let qmark_v_45 = (s_count 5) in
+   let qmark_v_48 = (qmark_v_46 /\ qmark_v_47) in
+   let qmark_v_49 = (s_count 6) in
+   let qmark_v_52 = (qmark_v_50 /\ qmark_v_51) in
+   let qmark_v_53 = (s_count 7) in
+   let qmark_v_56 = (qmark_v_54 /\ qmark_v_55) in
+   let qmark_v_57 = (s_count 8) in
+   let qmark_v_60 = (qmark_v_58 /\ qmark_v_59) in
+   let qmark_v_61 = (s_count 9) in
+   let qmark_v_64 = (qmark_v_62 /\ qmark_v_63) in
+   let qmark_v_65 = (s_count 10) in
+   let qmark_v_102 = (format 12) in
+   let qmark_v_67 = (qmark_v_66 /\ qmark_v_102 = s) in
+   let qmark_v_68 = (s_count 11) in
+   let qmark_v_70 = (qmark_v_22 /\ qmark_v_69) in
+   let qmark_v_71 = (x_count 0) in
+   let qmark_v_73 = (qmark_v_26 /\ qmark_v_72) in
+   let qmark_v_74 = (x_count 1) in
+   let qmark_v_76 = (qmark_v_30 /\ qmark_v_75) in
+   let qmark_v_77 = (x_count 2) in
+   let qmark_v_79 = (qmark_v_34 /\ qmark_v_78) in
+   let qmark_v_80 = (x_count 3) in
+   let qmark_v_82 = (qmark_v_38 /\ qmark_v_81) in
+   let qmark_v_83 = (x_count 4) in
+   let qmark_v_85 = (qmark_v_42 /\ qmark_v_84) in
+   let qmark_v_86 = (x_count 5) in
+   let qmark_v_88 = (qmark_v_46 /\ qmark_v_87) in
+   let qmark_v_89 = (x_count 6) in
+   let qmark_v_91 = (qmark_v_50 /\ qmark_v_90) in
+   let qmark_v_92 = (x_count 7) in
+   let qmark_v_94 = (qmark_v_54 /\ qmark_v_93) in
+   let qmark_v_95 = (x_count 8) in
+   let qmark_v_97 = (qmark_v_58 /\ qmark_v_96) in
+   let qmark_v_98 = (x_count 9) in
+   let qmark_v_100 = (qmark_v_62 /\ qmark_v_99) in
+   let qmark_v_101 = (x_count 10) in
+   let qmark_v_103 = (qmark_v_66 /\ qmark_v_102 = x) in
+   let qmark_v_104 = (x_count 11) in
+   let qmark_v_2 = (fmt0 + 0) in
+   let qmark_v_3 = (fmt0 + 2) in
+   let qmark_v_4 = (fmt0 + 3) in
+   let qmark_v_5 = (fmt0 + 4) in
+   let qmark_v_6 = (fmt0 + 5) in
+   let qmark_v_7 = (fmt0 + 6) in
+   let qmark_v_8 = (fmt0 + 7) in
+   let qmark_v_9 = (fmt0 + 8) in
+   (not ((((((((((((distance = 12 /\ fmt_length = 12) /\ adr_lo = 3) /\ adr_medlo = 4) /\ adr_medhi = 5) /\ adr_hi = 6) /\ ((percent = 37 /\ s = 115) /\ x = 120)) /\ (((((((fmt0 = 0 /\ arg0 = (fmt0 - distance)) /\ arg1 >= fmt0) /\ fmt1 < (fmt0 + (fmt_length - 1))) /\ fmt1 > qmark_v_1) /\ arg1 >= (arg0 + distance)) /\ arg1 < (arg0 + (distance + (fmt_length - 4)))) /\ arg1 = ((arg0 + (4 * (s_count qmark_v_0))) + (4 * (x_count qmark_v_0))))) /\ ((((((((((((fmt1 = qmark_v_2 \/ fmt1 = qmark_v_1) \/ fmt1 = qmark_v_3) \/ fmt1 = qmark_v_4) \/ fmt1 = qmark_v_5) \/ fmt1 = qmark_v_6) \/ fmt1 = qmark_v_7) \/ fmt1 = qmark_v_8) \/ fmt1 = qmark_v_9) \/ fmt1 = (fmt0 + 9)) \/ fmt1 = (fmt0 + 10)) \/ fmt1 = (fmt0 + 11)) /\ ((((((((arg1 = qmark_v_2 \/ arg1 = qmark_v_1) \/ arg1 = qmark_v_3) \/ arg1 = qmark_v_4) \/ arg1 = qmark_v_5) \/ arg1 = qmark_v_6) \/ arg1 = qmark_v_7) \/ arg1 = qmark_v_8) \/ arg1 = qmark_v_9))) /\ ((((((((((((((((((qmark_v_22 \/ qmark_v_10 = s) \/ qmark_v_10 = x) \/ qmark_v_10 = 3) \/ qmark_v_10 = 4) \/ qmark_v_10 = 5) \/ qmark_v_10 = 6) \/ qmark_v_10 = 255) /\ (((((((qmark_v_26 \/ qmark_v_23) \/ qmark_v_69) \/ qmark_v_11 = 3) \/ qmark_v_11 = 4) \/ qmark_v_11 = 5) \/ qmark_v_11 = 6) \/ qmark_v_11 = 255)) /\ (((((((qmark_v_30 \/ qmark_v_27) \/ qmark_v_72) \/ qmark_v_12 = 3) \/ qmark_v_12 = 4) \/ qmark_v_12 = 5) \/ qmark_v_12 = 6) \/ qmark_v_12 = 255)) /\ (((((((qmark_v_34 \/ qmark_v_31) \/ qmark_v_75) \/ qmark_v_13 = 3) \/ qmark_v_13 = 4) \/ qmark_v_13 = 5) \/ qmark_v_13 = 6) \/ qmark_v_13 = 255)) /\ (((((((qmark_v_38 \/ qmark_v_35) \/ qmark_v_78) \/ qmark_v_14 = 3) \/ qmark_v_14 = 4) \/ qmark_v_14 = 5) \/ qmark_v_14 = 6) \/ qmark_v_14 = 255)) /\ (((((((qmark_v_42 \/ qmark_v_39) \/ qmark_v_81) \/ qmark_v_15 = 3) \/ qmark_v_15 = 4) \/ qmark_v_15 = 5) \/ qmark_v_15 = 6) \/ qmark_v_15 = 255)) /\ (((((((qmark_v_46 \/ qmark_v_43) \/ qmark_v_84) \/ qmark_v_16 = 3) \/ qmark_v_16 = 4) \/ qmark_v_16 = 5) \/ qmark_v_16 = 6) \/ qmark_v_16 = 255)) /\ (((((((qmark_v_50 \/ qmark_v_47) \/ qmark_v_87) \/ qmark_v_17 = 3) \/ qmark_v_17 = 4) \/ qmark_v_17 = 5) \/ qmark_v_17 = 6) \/ qmark_v_17 = 255)) /\ (((((((qmark_v_54 \/ qmark_v_51) \/ qmark_v_90) \/ qmark_v_18 = 3) \/ qmark_v_18 = 4) \/ qmark_v_18 = 5) \/ qmark_v_18 = 6) \/ qmark_v_18 = 255)) /\ (((((((qmark_v_58 \/ qmark_v_55) \/ qmark_v_93) \/ qmark_v_19 = 3) \/ qmark_v_19 = 4) \/ qmark_v_19 = 5) \/ qmark_v_19 = 6) \/ qmark_v_19 = 255)) /\ (((((((qmark_v_62 \/ qmark_v_59) \/ qmark_v_96) \/ qmark_v_20 = 3) \/ qmark_v_20 = 4) \/ qmark_v_20 = 5) \/ qmark_v_20 = 6) \/ qmark_v_20 = 255)) /\ (((((((qmark_v_66 \/ qmark_v_63) \/ qmark_v_99) \/ qmark_v_21 = 3) \/ qmark_v_21 = 4) \/ qmark_v_21 = 5) \/ qmark_v_21 = 6) \/ qmark_v_21 = 255))) /\ (((((((((((((qmark_v_24 ->
+    qmark_v_25 = 1) /\ ((not qmark_v_24) ->
+    qmark_v_25 = 0)) /\ ((qmark_v_28 ->
+    qmark_v_29 = (qmark_v_25 + 1)) /\ ((not qmark_v_28) ->
+    qmark_v_29 = qmark_v_25))) /\ ((qmark_v_32 ->
+    qmark_v_33 = (qmark_v_29 + 1)) /\ ((not qmark_v_32) ->
+    qmark_v_33 = qmark_v_29))) /\ ((qmark_v_36 ->
+    qmark_v_37 = (qmark_v_33 + 1)) /\ ((not qmark_v_36) ->
+    qmark_v_37 = qmark_v_33))) /\ ((qmark_v_40 ->
+    qmark_v_41 = (qmark_v_37 + 1)) /\ ((not qmark_v_40) ->
+    qmark_v_41 = qmark_v_37))) /\ ((qmark_v_44 ->
+    qmark_v_45 = (qmark_v_41 + 1)) /\ ((not qmark_v_44) ->
+    qmark_v_45 = qmark_v_41))) /\ ((qmark_v_48 ->
+    qmark_v_49 = (qmark_v_45 + 1)) /\ ((not qmark_v_48) ->
+    qmark_v_49 = qmark_v_45))) /\ ((qmark_v_52 ->
+    qmark_v_53 = (qmark_v_49 + 1)) /\ ((not qmark_v_52) ->
+    qmark_v_53 = qmark_v_49))) /\ ((qmark_v_56 ->
+    qmark_v_57 = (qmark_v_53 + 1)) /\ ((not qmark_v_56) ->
+    qmark_v_57 = qmark_v_53))) /\ ((qmark_v_60 ->
+    qmark_v_61 = (qmark_v_57 + 1)) /\ ((not qmark_v_60) ->
+    qmark_v_61 = qmark_v_57))) /\ ((qmark_v_64 ->
+    qmark_v_65 = (qmark_v_61 + 1)) /\ ((not qmark_v_64) ->
+    qmark_v_65 = qmark_v_61))) /\ ((qmark_v_67 ->
+    qmark_v_68 = (qmark_v_65 + 1)) /\ ((not qmark_v_67) ->
+    qmark_v_68 = qmark_v_65)))) /\ (((((((((((((qmark_v_70 ->
+    qmark_v_71 = 1) /\ ((not qmark_v_70) ->
+    qmark_v_71 = 0)) /\ ((qmark_v_73 ->
+    qmark_v_74 = (qmark_v_71 + 1)) /\ ((not qmark_v_73) ->
+    qmark_v_74 = qmark_v_71))) /\ ((qmark_v_76 ->
+    qmark_v_77 = (qmark_v_74 + 1)) /\ ((not qmark_v_76) ->
+    qmark_v_77 = qmark_v_74))) /\ ((qmark_v_79 ->
+    qmark_v_80 = (qmark_v_77 + 1)) /\ ((not qmark_v_79) ->
+    qmark_v_80 = qmark_v_77))) /\ ((qmark_v_82 ->
+    qmark_v_83 = (qmark_v_80 + 1)) /\ ((not qmark_v_82) ->
+    qmark_v_83 = qmark_v_80))) /\ ((qmark_v_85 ->
+    qmark_v_86 = (qmark_v_83 + 1)) /\ ((not qmark_v_85) ->
+    qmark_v_86 = qmark_v_83))) /\ ((qmark_v_88 ->
+    qmark_v_89 = (qmark_v_86 + 1)) /\ ((not qmark_v_88) ->
+    qmark_v_89 = qmark_v_86))) /\ ((qmark_v_91 ->
+    qmark_v_92 = (qmark_v_89 + 1)) /\ ((not qmark_v_91) ->
+    qmark_v_92 = qmark_v_89))) /\ ((qmark_v_94 ->
+    qmark_v_95 = (qmark_v_92 + 1)) /\ ((not qmark_v_94) ->
+    qmark_v_95 = qmark_v_92))) /\ ((qmark_v_97 ->
+    qmark_v_98 = (qmark_v_95 + 1)) /\ ((not qmark_v_97) ->
+    qmark_v_98 = qmark_v_95))) /\ ((qmark_v_100 ->
+    qmark_v_101 = (qmark_v_98 + 1)) /\ ((not qmark_v_100) ->
+    qmark_v_101 = qmark_v_98))) /\ ((qmark_v_103 ->
+    qmark_v_104 = (qmark_v_101 + 1)) /\ ((not qmark_v_103) ->
+    qmark_v_104 = qmark_v_101)))) ->
+    ((((((not (format fmt1) = percent) /\ (format (fmt1 + 1)) = s) /\ (format arg1) = adr_lo) /\ (format (arg1 + 1)) = adr_medlo) /\ (format (arg1 + 2)) = adr_medhi) /\ (format (arg1 + 3)) = adr_hi)))
+
+goal g_1:
+   false
+
+end

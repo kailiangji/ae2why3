@@ -1,0 +1,10 @@
+theory TEST_QUESTIONMARK
+
+
+use import int.Int
+
+goal tt:
+   let qmark_v = (1 + 4) in
+   (qmark_v + 1) = 6
+
+end
