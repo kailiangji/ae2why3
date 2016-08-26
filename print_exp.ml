@@ -634,7 +634,8 @@ let rec print_lexpr fmt (g, l, expr) =
 	  (String.uncapitalize id) print_lexprs (g, l, exprs)
      end
   | PPinInterval _ -> assert false
-  | PPdistinct exprs -> assert false
+  | PPdistinct exprs ->
+     fprintf fmt "(%a)" pairwise_distinct (g, l, exprs)
   | PPconst const -> 
     begin
       match const with
@@ -689,7 +690,9 @@ let rec print_lexpr fmt (g, l, expr) =
   | PPwith (exp, lbl_lst) -> assert false
   | PPextract (lexp, mexp, rexp) -> assert false
   | PPconcat (lexp, rexp) -> assert false
-  | PPif (lexp, mexp, rexp) -> assert false
+  | PPif (e1, e2, e3) ->
+     fprintf fmt "(if %a then %a else %a)"
+       print_lexpr (g, l, e1) print_lexpr (g, l, e2) print_lexpr (g, l, e3)
   | PPforall (t_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
      begin
        begin
@@ -831,7 +834,34 @@ and print_trigger fmt (g, l, tr) =
 	 fprintf fmt ", %a" print_lexpr (g, l,	exp)
        ) tl
      end
-     
+
+and pairwise_distinct fmt (g, l, exprs) =
+  match exprs with
+  | [] -> ()
+  | [h] -> ()
+  | h1 :: h2 :: tl ->
+     begin
+       fprintf fmt "%a <> %a"
+	 print_lexpr (g, l, h1) print_lexpr (g, l, h2);
+       List.iter (fun v ->
+	 fprintf fmt " /\\ %a <> %a"
+	   print_lexpr (g, l, h1) print_lexpr (g, l, v))
+	 tl;
+       pairwise_distinct1 fmt (g, l, (h2::tl))
+     end
+and pairwise_distinct1 fmt (g, l, exps) =
+  match exps with
+  | [] -> ()
+  | [h] -> ()
+  | h :: tl ->
+     begin
+       List.iter (fun v ->
+	 fprintf fmt " /\\ %a <> %a"
+	   print_lexpr (g, l, h) print_lexpr (g, l, v))
+	 tl;
+       pairwise_distinct1 fmt (g, l, tl)
+     end
+       
 let print_func fmt (g,lib,f, f_rm) =
   match f with
   | Function_def (name_id, args, prim_ty, exp )->
