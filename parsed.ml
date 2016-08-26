@@ -104,8 +104,7 @@ type decl =
   | Predicate_def of
        (string * string) * ( string * ppure_type) list * lexpr
   | Function_def of
-       (string * string) *
-	( string * ppure_type) list * ppure_type * lexpr
+       (string * string) * ( string * ppure_type) list * ppure_type * lexpr
   | TypeDecl of string list * string * body_type_decl
 
 
@@ -121,13 +120,14 @@ type loc_decs=
    mutable bool_vars: string list}
 
 type lib_include =
-  {mutable int_lib : bool; mutable real_lib : bool;
-   mutable bool_lib : bool; mutable float_rnd : bool;
-   mutable float_sgl : bool; mutable float_dbl : bool;
-   mutable map_lib : bool; mutable abs_int : bool;
-   mutable abs_real : bool; mutable real_of_int : bool;
-   mutable sqrt_real : bool; mutable mode : bool; mutable unit : bool}
+  {mutable int_lib   : bool; mutable real_lib    : bool;
+   mutable bool_lib  : bool; mutable float_rnd   : bool;
+   mutable float_sgl : bool; mutable float_dbl   : bool;
+   mutable map_lib   : bool; mutable abs_int     : bool;
+   mutable abs_real  : bool; mutable real_of_int : bool;
+   mutable sqrt_real : bool; mutable mode        : bool;
+   mutable unit      : bool}
 
 type filters =
-  {mutable axioms : string list; mutable funs : string list;
-   mutable preds : string list; mutable types : string list}
+  {mutable axioms : string list; mutable funs  : string list;
+   mutable preds  : string list; mutable types : string list}

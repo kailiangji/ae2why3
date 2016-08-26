@@ -10,17 +10,17 @@ let rec print_ppure_type fmt ty =
   | PPTreal -> fprintf fmt "real"
   | PPTunit -> fprintf fmt "tuple0"
   | PPTbitv _ -> assert false
-  | PPTvarid id -> fprintf fmt "'%s" id
+  | PPTvarid id -> fprintf fmt "'%s" (String.uncapitalize id)
   | PPTexternal (pt_lst, id) ->
      if List.length pt_lst = 0 then
        fprintf fmt "%s"
-	 (if String.compare id "fpa_rounding_mode" = 0 then
-	     "mode"
-	  else id)
+	 (if id = "fpa_rounding_mode" then "mode"
+	  else (String.uncapitalize id))
      else
        begin
 	 fprintf fmt "(%s" 
-	   ( if String.compare id "farray" = 0 then "map" else id);
+	   ( if id ="farray" then "map"
+	     else (String.uncapitalize id));
 	 List.iter (fun pt ->
 	   fprintf fmt " %a" print_ppure_type pt) pt_lst;
 	 fprintf fmt ")"
@@ -33,17 +33,18 @@ let rec print_ppure_type1 fmt ty =
   | PPTreal -> fprintf fmt "real"
   | PPTunit -> fprintf fmt "tuple0"
   | PPTbitv _ -> assert false
-  | PPTvarid id -> fprintf fmt "'%s" id
+  | PPTvarid id -> fprintf fmt "'%s" (String.uncapitalize id)
   | PPTexternal (pt_lst, id) ->
      if List.length pt_lst = 0 then
        fprintf fmt "%s"
-	 (if String.compare id "fpa_rounding_mode" = 0 then
+	 (if id = "fpa_rounding_mode" then
 	     "mode"
-	  else id)
+	  else (String.uncapitalize id))
      else
        begin
 	 fprintf fmt "%s" 
-	   ( if String.compare id "farray" = 0 then "map" else id);
+	   ( if id = "farray" then "map"
+	     else (String.uncapitalize id));
 	 List.iter (fun pt ->
 	   fprintf fmt " %a" print_ppure_type pt) pt_lst;
        end
@@ -250,14 +251,14 @@ let rec test_types1 lib pt_lst lib_lst =
 	     end
 	| PPTexternal (pt_lst, id) ->
 	   begin
-	     if lib.map_lib = false && String.compare id "farray" = 0 then
+	     if lib.map_lib = false && id = "farray" then
 	       begin
 		 lib.map_lib <- true;
 		 lib_lst := "map_lib" :: !lib_lst;
 	       end
 	     else
 	       if lib.mode = false &&
-		 String.compare id "fpa_rounding_mode" = 0 then
+		 id = "fpa_rounding_mode" then
 		 begin
 		   lib.mode <- true;
 		   lib_lst := "mode" :: !lib_lst;
@@ -301,14 +302,14 @@ let rec test_types lib lb_tys lib_lst =
 	     end
 	| PPTexternal (pt_lst, id) ->
 	   begin
-	     if lib.map_lib = false && String.compare id "farray" = 0 then
+	     if lib.map_lib = false && id = "farray" then
 	       begin
 		 lib.map_lib <- true;
 		 lib_lst := "map_lib" :: !lib_lst;
 	       end
 	     else
 	       if lib.mode = false &&
-		 String.compare id "fpa_rounding_mode" = 0 then
+		 id = "fpa_rounding_mode" then
 		 begin
 		   lib.mode <- true;
 		   lib_lst := "mode" :: !lib_lst;
@@ -351,7 +352,7 @@ let print_type fmt (g, lib, ty) =
 	    end
        | _ ->
 	  begin
-	    fprintf fmt "\n\ntype %s " id;
+	    fprintf fmt "\n\ntype %s " (String.uncapitalize id);
 	    List.iter (fun var -> fprintf fmt "'%s " var) vars
 	  end
      end
@@ -978,6 +979,7 @@ let rec test_local_types g l lib expr ty_lst =
 	      lib.unit <- true;
 	      ty_lst := "unit" :: !ty_lst
 	    end
+       | ConstBitv _ -> assert false
      end
   | PPinfix (e1, op, e2)->
      begin
