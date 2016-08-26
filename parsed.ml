@@ -44,10 +44,13 @@ type ppure_type =
   | PPTbitv of int
   | PPTvarid of string 
   | PPTexternal of ppure_type list * string 
-
+(*
 type lexpr =
-    { pp_desc : pp_desc }
+    {pp_loc : Loc.t; pp_desc : pp_desc }
+*)
 
+type lexpr = {pp_desc : pp_desc }
+  
 and pp_desc =
   | PPvar of string
   | PPapp of string * lexpr list
