@@ -68,7 +68,7 @@
 #
 # The Caml sources (including camlyacc and camllex source files)
 
-SOURCES = lexer.mll parsed.ml type_check.ml print_exp.ml parser.mly ae2why3.ml
+SOURCES = lexer.mll parsed.ml type_check.ml print_exp.ml parser.mly options.ml loc.ml ae2why3.ml
 
 # The executable file to generate (default a.out under Unix)
 
