@@ -1,7 +1,7 @@
 open Format
 open Lexing
 
-type pos = Lexing.position * Lexing.position
+type t = Lexing.position * Lexing.position
 
 let report fmt (b,e) =
   let l = b.pos_lnum in

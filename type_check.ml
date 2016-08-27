@@ -114,13 +114,13 @@ let rec type_lexpr exp g l=
   | PPextract (lexp, mexp, rexp) -> assert false
   | PPconcat (lexp, rexp) -> assert false
   | PPif (lexp, mexp, rexp) -> assert false
-  | PPforall (vars, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPforall (vars, pp_ty, exp_lst_lst, exp) -> 
      assert false
-  | PPexists (vars, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPexists (vars, pp_ty, exp_lst_lst, exp) -> 
      assert false
-  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp) -> 
     assert false
-  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp) -> 
      assert false
   | PPnamed (id, exp) -> assert false
   | PPlet (id, lexp, rexp) -> assert false

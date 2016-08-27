@@ -9,8 +9,8 @@ let rec print_ppure_type fmt ty =
   | PPTreal -> fprintf fmt "real"
   | PPTunit -> fprintf fmt "tuple0"
   | PPTbitv _ -> assert false
-  | PPTvarid id -> fprintf fmt "'%s" (String.uncapitalize id)
-  | PPTexternal (pt_lst, id) ->
+  | PPTvarid (id,_) -> fprintf fmt "'%s" (String.uncapitalize id)
+  | PPTexternal (pt_lst, id,_) ->
      if List.length pt_lst = 0 then
        fprintf fmt "%s"
 	 (if id = "fpa_rounding_mode" then "mode"
@@ -32,8 +32,8 @@ let rec print_ppure_type1 fmt ty =
   | PPTreal -> fprintf fmt "real"
   | PPTunit -> fprintf fmt "tuple0"
   | PPTbitv _ -> assert false
-  | PPTvarid id -> fprintf fmt "'%s" (String.uncapitalize id)
-  | PPTexternal (pt_lst, id) ->
+  | PPTvarid (id,_) -> fprintf fmt "'%s" (String.uncapitalize id)
+  | PPTexternal (pt_lst, id,_) ->
      if List.length pt_lst = 0 then
        fprintf fmt "%s"
 	 (if id = "fpa_rounding_mode" then
@@ -180,13 +180,13 @@ let rec test_fun_names g lib expr fun_lst =
        test_fun_names g lib e2 fun_lst;
        test_fun_names g lib e3 fun_lst
      end
-  | PPforall (vars, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPforall (vars, pp_ty, exp_lst_lst, e1) ->
      test_fun_names g lib e1 fun_lst
-  | PPexists (vars, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPexists (vars, pp_ty, exp_lst_lst, e1) ->
      test_fun_names g lib e1 fun_lst
-  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp_lst, e1) -> 
+  | PPforall_named (id_lst, pp_ty, exp_lst_lst, e1) -> 
      test_fun_names g lib e1 fun_lst
-  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp_lst, e1) -> 
+  | PPexists_named (id_lst, pp_ty, exp_lst_lst, e1) -> 
      test_fun_names g lib e1 fun_lst
   | PPnamed (id, e1) -> test_fun_names g lib e1 fun_lst
   | PPlet (id, e1, e2) ->
@@ -248,7 +248,7 @@ let rec test_types1 lib pt_lst lib_lst =
 	       lib.unit <- true;
 	       lib_lst := "unit" :: !lib_lst
 	     end
-	| PPTexternal (pt_lst, id) ->
+	| PPTexternal (pt_lst, id,_) ->
 	   begin
 	     if lib.map_lib = false && id = "farray" then
 	       begin
@@ -268,8 +268,11 @@ let rec test_types1 lib pt_lst lib_lst =
 	| _ -> ()
       end
     ) pt_lst
-       
-let rec test_types lib lb_tys lib_lst =
+
+
+
+
+let test_types2 lib lb_tys lib_lst =
   List.iter
     (fun lb_ty ->
       let (var, ty) = lb_ty in
@@ -299,7 +302,59 @@ let rec test_types lib lb_tys lib_lst =
 	       lib.unit <- true;
 	       lib_lst := "unit" :: !lib_lst
 	     end
-	| PPTexternal (pt_lst, id) ->
+	| PPTexternal (pt_lst, id,_) ->
+	   begin
+	     if lib.map_lib = false && id = "farray" then
+	       begin
+		 lib.map_lib <- true;
+		 lib_lst := "map_lib" :: !lib_lst;
+	       end
+	     else
+	       if lib.mode = false &&
+		 id = "fpa_rounding_mode" then
+		 begin
+		   lib.mode <- true;
+		   lib_lst := "mode" :: !lib_lst;
+		   assert (pt_lst = [])
+		 end;
+	     test_types1 lib pt_lst lib_lst
+	   end
+	| _ -> ()
+      end
+    )lb_tys
+
+
+let test_types lib lb_tys lib_lst =
+  List.iter
+    (fun lb_ty ->
+      let (_,var, ty) = lb_ty in
+      begin
+	match ty with
+	| PPTint ->
+	   if lib.int_lib = false then
+	     begin
+	       lib.int_lib <- true;
+	       lib_lst := "int_lib" :: !lib_lst
+	     end
+	| PPTbool ->
+	   if lib.bool_lib = false then
+	     begin
+	       lib.bool_lib <- true;
+	       lib_lst := "bool_lib" :: !lib_lst
+	     end
+	| PPTreal ->
+	   if lib.real_lib = false then
+	     begin
+	       lib.real_lib <- true;
+	       lib_lst := "real_lib" :: !lib_lst
+	     end
+	| PPTunit ->
+	   if lib.unit = false then
+	     begin
+	       lib.unit <- true;
+	       lib_lst := "unit" :: !lib_lst
+	     end
+	| PPTexternal (pt_lst, id,_) ->
 	   begin
 	     if lib.map_lib = false && id = "farray" then
 	       begin
@@ -332,7 +387,7 @@ let rec print_record fmt lb_types =
        
 let print_type fmt (g, lib, ty) =
   match ty with
-  | TypeDecl (vars, id, Abstract) ->
+  | TypeDecl (_,vars, id, Abstract) ->
      begin
        match id with
        | "single" ->
@@ -355,17 +410,17 @@ let print_type fmt (g, lib, ty) =
 	    List.iter (fun var -> fprintf fmt "'%s " var) vars
 	  end
      end
-  | TypeDecl (vars, id, Enum id_lst) ->
+  | TypeDecl (_,vars, id, Enum id_lst) ->
      begin
        fprintf fmt "\n\ntype %s " id;
        List.iter (fun var -> fprintf fmt "'%s " var) vars;
        fprintf fmt "= %s" (List.hd id_lst);
        List.iter (fun id -> fprintf fmt " | %s" id) (List.tl id_lst);
      end
-  | TypeDecl (vars, id, Record lbl_lst) ->
+  | TypeDecl (_,vars, id, Record lbl_lst) ->
      begin
        let lib_lst = ref [] in
-       test_types lib lbl_lst lib_lst;
+       test_types2 lib lbl_lst lib_lst;
        List.iter (fun lib -> print_modules fmt lib) (List.rev !lib_lst);
        fprintf fmt "\n\ntype %s " id;
        List.iter (fun var -> fprintf fmt "'%s " var) vars;
@@ -409,14 +464,14 @@ let print_fun_name fmt id =
 
 let print_fun_args fmt args =
   List.iter (fun arg ->
-    let (var, ty) = arg in
+    let (_, var, ty) = arg in
     fprintf fmt "(%s : %a) " var print_ppure_type1 ty
   ) args
 
     
 let print_logic fmt (g, lib, lg, f_rm) =
   match lg with
-  | Logic (nam_kd,id_lst, ty) ->
+  | Logic (_,nam_kd,id_lst, ty) ->
      begin       
        match nam_kd with
        | Other ->
@@ -693,7 +748,7 @@ let rec print_lexpr fmt (g, l, expr) =
   | PPif (e1, e2, e3) ->
      fprintf fmt "(if %a then %a else %a)"
        print_lexpr (g, l, e1) print_lexpr (g, l, e2) print_lexpr (g, l, e3)
-  | PPforall (t_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPforall (t_lst, pp_ty, exp_lst_lst, exp) -> 
      begin
        begin
 	 match pp_ty with
@@ -710,7 +765,7 @@ let rec print_lexpr fmt (g, l, expr) =
        (*print_filters fmt exp_lst;*)
        fprintf fmt ".\n   %a)" print_lexpr (g, l, exp)      
     end
-  | PPexists (t_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPexists (t_lst, pp_ty, exp_lst_lst, exp) -> 
      begin
        begin
 	 match pp_ty with
@@ -727,7 +782,7 @@ let rec print_lexpr fmt (g, l, expr) =
        (*print_filters fmt exp_lst;*)
        fprintf fmt ".\n   %a)" print_lexpr (g, l, exp)      
      end
-  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp) -> 
      begin
        begin
 	 match pp_ty with
@@ -744,7 +799,7 @@ let rec print_lexpr fmt (g, l, expr) =
       (*print_filters fmt exp_lst;*)
       fprintf fmt ".\n   %a)" print_lexpr (g, l, exp)      
     end
-  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp_lst, exp) -> 
+  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp) -> 
      begin
        begin
 	 match pp_ty with
@@ -864,7 +919,7 @@ and pairwise_distinct1 fmt (g, l, exps) =
        
 let print_func fmt (g,lib,f, f_rm) =
   match f with
-  | Function_def (name_id, args, prim_ty, exp )->
+  | Function_def (_,name_id, args, prim_ty, exp )->
      if List.mem (fst name_id) f_rm then ()
      else
        begin
@@ -874,7 +929,7 @@ let print_func fmt (g,lib,f, f_rm) =
 	 List.iter (fun fname -> fprintf fmt "%a" print_modules fname)
 	   (List.rev !fun_lst);
 	 List.iter (fun arg ->
-	   let (id,ty) = arg in
+	   let (_,id,ty) = arg in
 	   match ty with
 	   | PPTint -> l.int_vars <- id :: l.int_vars
 	   | PPTreal -> l.real_vars <- id :: l.real_vars
@@ -902,7 +957,7 @@ let print_pred_name fmt id =
   
 let print_pred fmt (g, lib, p, preds_rm) = 
   match p with
-  | Predicate_def (id, lbls, exp) ->
+  | Predicate_def (_,id, lbls, exp) ->
      begin
        g.b_funs <- (fst id) :: g.b_funs;
        if List.mem (fst id) preds_rm then ()
@@ -928,7 +983,7 @@ let print_pred fmt (g, lib, p, preds_rm) =
 	     | _ ->
 		begin
 		  List.iter (fun lbl ->
-		    let (id,ty) = lbl in
+		    let (_,id,ty) = lbl in
 		    match ty with
 		    | PPTint -> l.int_vars <- id :: l.int_vars
 		    | PPTreal -> l.real_vars <- id :: l.real_vars
@@ -1020,22 +1075,22 @@ let rec test_local_types g l lib expr ty_lst =
        test_local_types g l lib e2 ty_lst;
        test_local_types g l lib e3 ty_lst
      end
-  | PPforall (vars, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPforall (vars, pp_ty, exp_lst_lst, e1) ->
      begin
        test_types1 lib [pp_ty] ty_lst;
        test_local_types g l lib e1 ty_lst
      end
-  | PPexists (vars, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPexists (vars, pp_ty, exp_lst_lst, e1) ->
      begin
        test_types1 lib [pp_ty] ty_lst;
        test_local_types g l lib e1 ty_lst
      end
-  | PPforall_named (id_lst, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPforall_named (id_lst, pp_ty, exp_lst_lst, e1) ->
      begin
        test_types1 lib [pp_ty] ty_lst;
        test_local_types g l lib e1 ty_lst
      end
-  | PPexists_named (id_lst, pp_ty, exp_lst_lst, exp_lst, e1) ->
+  | PPexists_named (id_lst, pp_ty, exp_lst_lst, e1) ->
      begin
        test_types1 lib [pp_ty] ty_lst;
        test_local_types g l lib e1 ty_lst
@@ -1080,7 +1135,7 @@ let rec test_local_types g l lib expr ty_lst =
      
 let print_axiom fmt (g, lib, ax, ax_rm) =
   match ax with
-  | Axiom (id, exp) ->
+  | Axiom (_,id, exp) ->
      if List.mem id ax_rm then ()
      else
        begin
@@ -1102,7 +1157,7 @@ let print_axiom fmt (g, lib, ax, ax_rm) =
 
 let print_goal fmt (g, lib, goal) =
   match goal with
-  | Goal (id, exp) ->
+  | Goal (_,id, exp) ->
      begin
        let l = {int_vars = []; real_vars = []; bool_vars = []} in
        let fun_lst = ref [] in

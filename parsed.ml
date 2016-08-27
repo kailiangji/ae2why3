@@ -1,24 +1,3 @@
-(******************************************************************************)
-(*     Alt-Ergo: The SMT Solver For Software Verification                     *)
-(*     Copyright (C) 2013-2015 --- OCamlPro                                   *)
-(*     This file is distributed under the terms of the CeCILL-C licence       *)
-(******************************************************************************)
-
-(******************************************************************************)
-(*     The Alt-Ergo theorem prover                                            *)
-(*     Copyright (C) 2006-2013                                                *)
-(*     CNRS - INRIA - Universite Paris Sud                                    *)
-(*                                                                            *)
-(*     Sylvain Conchon                                                        *)
-(*     Evelyne Contejean                                                      *)
-(*                                                                            *)
-(*     Francois Bobot                                                         *)
-(*     Mohamed Iguernelala                                                    *)
-(*     Stephane Lescuyer                                                      *)
-(*     Alain Mebsout                                                          *)
-(*                                                                            *)
-(*   This file is distributed under the terms of the CeCILL-C licence         *)
-(******************************************************************************)
 
 type constant =
   | ConstBitv of string
@@ -42,15 +21,15 @@ type ppure_type =
   | PPTreal
   | PPTunit
   | PPTbitv of int
-  | PPTvarid of string 
-  | PPTexternal of ppure_type list * string 
-(*
+  | PPTvarid of string * Loc.t
+  | PPTexternal of ppure_type list * string * Loc.t
+
 type lexpr =
     {pp_loc : Loc.t; pp_desc : pp_desc }
-*)
 
+(*
 type lexpr = {pp_desc : pp_desc }
-  
+*)
 and pp_desc =
   | PPvar of string
   | PPapp of string * lexpr list
@@ -69,12 +48,12 @@ and pp_desc =
   | PPextract of lexpr * lexpr * lexpr
   | PPconcat of lexpr * lexpr
   | PPif of lexpr * lexpr * lexpr
-  | PPforall of string list * ppure_type * lexpr list list * lexpr list * lexpr
-  | PPexists of string list * ppure_type * lexpr list list * lexpr list * lexpr
+  | PPforall of string list * ppure_type * lexpr list list  * lexpr
+  | PPexists of string list * ppure_type * lexpr list list  * lexpr
   | PPforall_named of
-      (string * string) list * ppure_type * lexpr list list * lexpr list * lexpr
+      (string * string) list * ppure_type * lexpr list list * lexpr
   | PPexists_named of
-      (string * string) list * ppure_type * lexpr list list * lexpr list * lexpr
+      (string * string) list * ppure_type * lexpr list list * lexpr
   | PPnamed of string * lexpr
   | PPlet of string * lexpr * lexpr
   | PPcheck of lexpr
@@ -100,16 +79,17 @@ type theory_decl =
 | ThCs of Loc.t * string * lexpr
       *)
 type decl =
-  | Axiom of  string * lexpr
-  | Rewriting of  string * lexpr list
-  | Goal of  string * lexpr
-  | Logic of name_kind * (string * string) list * plogic_type
+  | Axiom of Loc.t * string * lexpr
+  | Rewriting of Loc.t * string * lexpr list
+  | Goal of Loc.t * string * lexpr
+  | Logic of Loc.t * name_kind * (string * string) list * plogic_type
   | Predicate_def of
-       (string * string) * ( string * ppure_type) list * lexpr
+      Loc.t * (string * string) *
+	(Loc.t * string * ppure_type) list * lexpr
   | Function_def of
-       (string * string) * ( string * ppure_type) list * ppure_type * lexpr
-  | TypeDecl of string list * string * body_type_decl
-
+      Loc.t * (string * string) *
+	(Loc.t * string * ppure_type) list * ppure_type * lexpr
+  | TypeDecl of Loc.t * string list * string * body_type_decl
 
 type file = decl list
 
