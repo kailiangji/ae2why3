@@ -3,10 +3,12 @@ open Parsed
 
 exception Not_found
 exception Not_Math_Expr
-exception Not_Math_Expr1
+exception Not_Int_Real
 exception Not_Int_Real_Bool
 
 type int_or_real_or_bool = Is_Int | Is_Real | Is_Bool
+
+let fmt1 = std_formatter
 
 let rec find_in_local_vars id l =
   if List.mem id l.int_vars then Is_Int
@@ -27,7 +29,7 @@ let rec find_in_global_funs id g =
   else raise Not_found
     
 let rec type_lexpr exp g l=
-  let {pp_desc} = exp in
+  let {pp_loc;pp_desc} = exp in
   match pp_desc with
   | PPvar id ->
      begin
@@ -37,7 +39,7 @@ let rec type_lexpr exp g l=
 	   try find_in_global_vars id g
 	   with Not_found ->
 	     begin
-	       print_string id;
+	       Loc.report fmt1 pp_loc;
 	       raise Not_Int_Real_Bool
 	     end
 	 end
@@ -45,7 +47,11 @@ let rec type_lexpr exp g l=
   | PPapp (id, exp_lst) ->
      begin
        try find_in_global_funs id g
-       with Not_found -> raise Not_Int_Real_Bool
+       with Not_found -> 
+	 begin
+	   Loc.report fmt1 pp_loc;
+	   raise Not_Int_Real_Bool
+	 end
      end
   | PPconst const ->
      begin
@@ -53,7 +59,11 @@ let rec type_lexpr exp g l=
        | ConstInt _ -> Is_Int
        | ConstReal _ -> Is_Real
        | ConstTrue | ConstFalse -> Is_Bool
-       | _ -> raise Not_Int_Real_Bool
+       | _ -> 
+	 begin
+	   Loc.report fmt1 pp_loc;
+	   raise Not_Int_Real_Bool
+	 end
      end
   | PPinfix (lexp, op, rexp) ->
      begin
@@ -80,20 +90,28 @@ let rec type_lexpr exp g l=
 	    with Not_found ->
 	      begin
 		try find_in_global_vars id g
-		with Not_found -> raise Not_Int_Real_Bool
+		with Not_found ->
+		  begin
+		    Loc.report fmt1 lexp.pp_loc;
+		    raise Not_Int_Real_Bool
+		  end
 	      end
 	  end
-       | PPset (exp1, exp2, exp3) ->
+       | PPset (e1, e2, e3) ->
 	  begin
-	    match exp1.pp_desc with
+	    match e1.pp_desc with
 	    | PPvar id1 ->
 	       begin
 		 try find_in_local_vars id1 l
-	    with Not_found ->
-	      begin
-		try find_in_global_vars id1 g
-		with Not_found -> raise Not_Int_Real_Bool
-	      end
+		 with Not_found ->
+		   begin
+		     try find_in_global_vars id1 g
+		     with Not_found -> 
+		       begin
+			 Loc.report fmt1 e1.pp_loc;
+			 raise Not_Int_Real_Bool
+		       end
+		   end
 	       end
 	    | _ -> assert false
 	  end
@@ -126,13 +144,17 @@ let rec type_lexpr exp g l=
   | PPlet (id, lexp, rexp) -> assert false
   | PPcheck exp -> assert false
   | PPcut exp -> assert false
-  | PPcast (exp, pp_ty) ->
+  | PPcast (e, pp_ty) ->
      begin
        match pp_ty with
        | PPTint -> Is_Int
        | PPTreal -> Is_Real
        | PPTbool -> Is_Bool
-       | _ -> raise Not_Math_Expr
+       | _ -> 
+	 begin
+	   Loc.report fmt1 e.pp_loc;
+	   raise Not_Math_Expr
+	 end
      end
   | PPinInterval _ -> assert false
   | PPdistinct exp_lst -> assert false

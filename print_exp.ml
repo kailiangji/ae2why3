@@ -575,28 +575,28 @@ let print_pp_infix fmt (g, l, rexp, op) =
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "<"
        | Is_Real -> fprintf fmt "<."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPle ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "<="
        | Is_Real -> fprintf fmt "<=."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPgt ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt ">"
        | Is_Real -> fprintf fmt ">."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPge ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt ">="
        | Is_Real -> fprintf fmt ">=."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPeq -> fprintf fmt "="
   | PPneq -> fprintf fmt "<>"
@@ -605,28 +605,28 @@ let print_pp_infix fmt (g, l, rexp, op) =
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "+"
        | Is_Real -> fprintf fmt "+."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPsub ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "-"
        | Is_Real -> fprintf fmt "-."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPmul ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "*"
        | Is_Real -> fprintf fmt "*."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPdiv ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf fmt "/"
        | Is_Real -> fprintf fmt "/."
-       | _ -> assert false
+       | _ -> begin Loc.report fmt1 rexp.pp_loc; raise Not_Int_Real end
      end
   | PPmod -> assert false
 
