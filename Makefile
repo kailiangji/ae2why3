@@ -68,7 +68,15 @@
 #
 # The Caml sources (including camlyacc and camllex source files)
 
-SOURCES = lexer.mll parsed.ml options.ml loc.ml type_check.ml print_exp.ml parser.mly   ae2why3.ml
+SOURCES = options.mli \
+          options.ml \
+	  loc.ml \
+	  parsed.ml \
+	  type_check.ml \
+	  print_exp.ml \
+	  parser.mly \
+          lexer.mll \
+	  ae2why3.ml
 
 # The executable file to generate (default a.out under Unix)
 
@@ -186,7 +194,8 @@ edit:
 	emacs *.ml* &
 
 clean:
-	rm -f *.cm[iox] lexer.ml parser.ml parser.mli *.annot *~ .*~ #*#
+	rm -f *.cm[iox] lexer.ml parser.ml parser.mli
+	rm -f *.annot *~ .*~ *.o
 	rm -f $(EXEC)
 	rm -f $(EXEC).opt
 

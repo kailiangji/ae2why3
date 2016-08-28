@@ -17,11 +17,19 @@ let name_theory ori_file =
   if !j = 0 then
     let name1 = String.sub ori_file 0 (n-4) in
     let name2 = String.uppercase name1 in
-    String.map (fun c -> if c = '.' then '_' else c) name2
+    String.map (fun c -> 
+      match c with
+      | '.' -> '_'
+      | '-' -> '_'
+      | _ -> c) name2
   else
     let name1 = String.sub ori_file (!j+1) (n-1-(!j)-4) in
     let name2 = String.uppercase name1 in
-    String.map (fun c -> if c = '.' then '_' else c) name2
+    String.map (fun c -> 
+      match c with
+      | '.' -> '_'
+      | '-' -> '_'
+      | _ -> c) name2
 
 let axioms_to_remove =
   ["Zero"; "ONearestTiesToEven";"Add";"Sub";"Mul";"Neg";
