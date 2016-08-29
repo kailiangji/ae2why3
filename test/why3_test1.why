@@ -23,4 +23,10 @@ goal g_3:
    ((q 1 2) ->
     (p 4))
 
+use import real.RealInfix
+
+goal g_4:
+   (forall i j : int.
+   (i + 2) = (2. +. j))
+
 end

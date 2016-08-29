@@ -10,9 +10,11 @@ function f2(i:int,j:int):int = i + j + 2
 
 function f3 (i : real,j : real) : real = ((i + j) + 2.)
 
+function f4 (i : int, j : int) : int = i % j
 
 logic a : (int, real) farray
-(*function f3(b : int farray): bool = b = b[j<-b[i],k<-w]*)
+function f3(b : int farray): bool = b = b[j<-b[i],k<-w]
+
 
 predicate p(x : int, y : int) = x + y = 0
 

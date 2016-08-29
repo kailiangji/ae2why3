@@ -13,3 +13,7 @@ axiom a:
 goal g_3 : 
   Q(1,2) -> 
   P(4)
+
+goal g_4 :
+ forall i, j : int.
+ i + 2 = 2. + j

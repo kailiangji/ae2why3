@@ -68,7 +68,7 @@ let is_single exprs =
   
        
 let rec test_fun_names g lib expr fun_lst =
-  let {pp_desc} = expr in
+  let {pp_loc;pp_desc} = expr in
   match pp_desc with
   | PPvar id -> ()
   | PPapp (id, exprs) ->
@@ -572,66 +572,66 @@ let print_pp_infix chan_out (g, l, rexp, op) =
   | PPiff -> fprintf chan_out "<->"
   | PPlt ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "<"
        | Is_Real -> fprintf chan_out "<."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPle ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "<="
        | Is_Real -> fprintf chan_out "<=."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPgt ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out ">"
        | Is_Real -> fprintf chan_out ">."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPge ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out ">="
        | Is_Real -> fprintf chan_out ">=."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPeq -> fprintf chan_out "="
   | PPneq -> fprintf chan_out "<>"
   | PPadd ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "+"
        | Is_Real -> fprintf chan_out "+."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPsub ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "-"
        | Is_Real -> fprintf chan_out "-."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPmul ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "*"
        | Is_Real -> fprintf chan_out "*."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
   | PPdiv ->
      begin
-       match type_lexpr chan_out rexp g l with
+       match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "/"
        | Is_Real -> fprintf chan_out "/."
-       | _ -> begin Loc.report chan_out rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
      end
-  | PPmod -> assert false
+  | PPmod -> fprintf chan_out "mod"
 
 let rec print_lexpr chan_out (g, l, expr) =
-  let {pp_desc} = expr in
+  let {pp_loc;pp_desc} = expr in
   match pp_desc with
   | PPvar id -> fprintf chan_out "%s" id
   | PPapp (id, exprs) ->
@@ -728,7 +728,7 @@ let rec print_lexpr chan_out (g, l, expr) =
     begin
       match op with
       | PPneg ->
-	 if type_lexpr chan_out exp g l = Is_Int then 
+	 if type_lexpr exp g l = Is_Int then 
 	   fprintf chan_out "(-%a)" print_lexpr (g, l, exp)
 	 else
 	   fprintf chan_out "(-.%a)" print_lexpr (g, l, exp)
@@ -820,11 +820,12 @@ let rec print_lexpr chan_out (g, l, expr) =
   | PPlet (id, lexp, rexp) ->
      begin
        begin
-	 try
-	   if type_lexpr chan_out lexp g l = Is_Int then
+	   if type_lexpr lexp g l = Is_Int then
 	     l.int_vars <- id :: l.int_vars
-	   else l.real_vars <- id :: l.real_vars
-	 with Not_Math_Expr -> ()
+	   else if type_lexpr lexp g l = Is_Real then
+	     l.real_vars <- id :: l.real_vars
+	   else if type_lexpr lexp g l = Is_Bool then
+	     l.bool_vars <- id :: l.bool_vars
        end;
        fprintf chan_out "let %s = %a in\n   %a" id
 	 print_lexpr (g, l, lexp) print_lexpr (g, l, rexp)
@@ -999,12 +1000,12 @@ let print_pred chan_out (g, lib, p, preds_rm) =
      end
   | _ -> assert false
 
-let rec test_local_types chan_out g l lib expr ty_lst =
-  let {pp_desc} = expr in
+let rec test_local_types g l lib expr ty_lst =
+  let {pp_loc;pp_desc} = expr in
   match pp_desc with
   | PPvar id -> ()
   | PPapp (id, exprs) ->
-     List.iter (fun e -> test_local_types chan_out g l lib e ty_lst)
+     List.iter (fun e -> test_local_types g l lib e ty_lst)
        exprs
   | PPconst const ->
      begin
@@ -1037,69 +1038,101 @@ let rec test_local_types chan_out g l lib expr ty_lst =
      end
   | PPinfix (e1, op, e2)->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst
      end
   | PPprefix (op, e1) ->
-     test_local_types chan_out g l lib e1 ty_lst
+     test_local_types g l lib e1 ty_lst
   | PPget (e1, e2) ->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst
      end
   | PPset (e1, e2, e3) ->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst;
-       test_local_types chan_out g l lib e3 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst;
+       test_local_types g l lib e3 ty_lst
      end
   | PPdot (e1, id) ->
-     test_local_types chan_out g l lib e1 ty_lst
+     test_local_types g l lib e1 ty_lst
   | PPrecord lbls -> ()
   | PPwith (e1, lbls) ->
-     test_local_types chan_out g l lib e1 ty_lst
+     test_local_types g l lib e1 ty_lst
   | PPextract (e1,e2,e3) ->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst;
-       test_local_types chan_out g l lib e3 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst;
+       test_local_types g l lib e3 ty_lst
      end
   | PPconcat (e1,e2) ->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst
      end
   | PPif (e1,e2,e3) ->
      begin
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst;
-       test_local_types chan_out g l lib e3 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst;
+       test_local_types g l lib e3 ty_lst
      end
   | PPforall (vars, pp_ty, exp_lst_lst, e1) ->
      begin
+       begin
+	 match pp_ty with
+	 | PPTint ->
+	    List.iter (fun var -> l.int_vars <- var :: l.int_vars) vars
+	 | PPTreal ->
+	    List.iter (fun var -> l.real_vars <- var::l.real_vars) vars
+	 | _ -> ()
+       end;
        test_types1 lib [pp_ty] ty_lst;
-       test_local_types chan_out g l lib e1 ty_lst
+       test_local_types g l lib e1 ty_lst
      end
   | PPexists (vars, pp_ty, exp_lst_lst, e1) ->
      begin
+       begin
+	 match pp_ty with
+	 | PPTint ->
+	    List.iter (fun var -> l.int_vars <- var :: l.int_vars) vars
+	 | PPTreal ->
+	    List.iter (fun var -> l.real_vars <- var::l.real_vars) vars
+	 | _ -> ()
+       end;
        test_types1 lib [pp_ty] ty_lst;
-       test_local_types chan_out g l lib e1 ty_lst
+       test_local_types g l lib e1 ty_lst
      end
   | PPforall_named (id_lst, pp_ty, exp_lst_lst, e1) ->
      begin
+       begin
+	 match pp_ty with
+	 | PPTint ->
+	    List.iter (fun var -> l.int_vars <- (fst var)::l.int_vars) id_lst
+	 | PPTreal ->
+	    List.iter (fun var -> l.real_vars <- (fst var)::l.real_vars) id_lst
+	 | _ -> ()
+       end;
        test_types1 lib [pp_ty] ty_lst;
-       test_local_types chan_out g l lib e1 ty_lst
+       test_local_types g l lib e1 ty_lst
      end
   | PPexists_named (id_lst, pp_ty, exp_lst_lst, e1) ->
      begin
+       begin
+	 match pp_ty with
+	 | PPTint ->
+	    List.iter (fun var -> l.int_vars <- (fst var)::l.int_vars) id_lst
+	 | PPTreal ->
+	    List.iter (fun var -> l.real_vars <- (fst var)::l.real_vars) id_lst
+	 | _ -> ()
+       end;
        test_types1 lib [pp_ty] ty_lst;
-       test_local_types chan_out g l lib e1 ty_lst
+       test_local_types g l lib e1 ty_lst
      end
-  | PPnamed (id, e1) -> test_local_types chan_out g l lib e1 ty_lst
+  | PPnamed (id, e1) -> test_local_types g l lib e1 ty_lst
   | PPlet (id, e1, e2) ->
      begin
        begin
-	 match type_lexpr chan_out e1 g l with
+	 match type_lexpr e1 g l with
 	 | Is_Int ->
 	    if lib.int_lib = false then
 	      begin
@@ -1119,19 +1152,19 @@ let rec test_local_types chan_out g l lib expr ty_lst =
 		ty_lst := "bool_lib" :: !ty_lst
 	      end
        end;
-       test_local_types chan_out g l lib e1 ty_lst;
-       test_local_types chan_out g l lib e2 ty_lst
+       test_local_types g l lib e1 ty_lst;
+       test_local_types g l lib e2 ty_lst
      end
-  | PPcheck e1 -> test_local_types chan_out g l lib e1 ty_lst
-  | PPcut e1 -> test_local_types chan_out g l lib e1 ty_lst
+  | PPcheck e1 -> test_local_types g l lib e1 ty_lst
+  | PPcut e1 -> test_local_types g l lib e1 ty_lst
   | PPcast (e1, pp_ty) ->
      begin
        test_types1 lib [pp_ty] ty_lst;
-       test_local_types chan_out g l lib e1 ty_lst
+       test_local_types g l lib e1 ty_lst
      end
   | PPinInterval _ -> ()
   | PPdistinct exp_lst ->
-     List.iter (fun e1 -> test_local_types chan_out g l lib e1 ty_lst) exp_lst
+     List.iter (fun e1 -> test_local_types g l lib e1 ty_lst) exp_lst
      
 let print_axiom chan_out (g, lib, ax, ax_rm) =
   match ax with
@@ -1142,7 +1175,7 @@ let print_axiom chan_out (g, lib, ax, ax_rm) =
 	 let l = {int_vars = []; real_vars = []; bool_vars = []} in
 	 let fun_lst = ref [] in
 	 let ty_lst = ref [] in
-	 test_local_types chan_out g l lib exp ty_lst;
+	 test_local_types g l lib exp ty_lst;
 	 test_fun_names g lib exp fun_lst;
 	 List.iter (fun ty ->
 	   fprintf chan_out "%a" print_modules ty
@@ -1162,7 +1195,7 @@ let print_goal chan_out (g, lib, goal) =
        let l = {int_vars = []; real_vars = []; bool_vars = []} in
        let fun_lst = ref [] in
        let ty_lst = ref [] in
-       test_local_types chan_out g l lib exp ty_lst;
+       test_local_types g l lib exp ty_lst;
        test_fun_names g lib exp fun_lst;
        List.iter (fun ty ->
 	 fprintf chan_out "%a" print_modules ty
