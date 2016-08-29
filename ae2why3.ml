@@ -1,7 +1,7 @@
 open Parsing
 open Options
 open Loc
-open Format
+open Printf
 open Parsed
 open Type_check
 open Print_exp
@@ -63,10 +63,10 @@ let () =
   let chan_in = open_in ori_file in
   let goal_file = output_file() in
   let chan_out = open_out goal_file in
-  let fmt = formatter_of_out_channel chan_out in
   let lexbuf = Lexing.from_channel chan_in in
   let result = Parser.file Lexer.token lexbuf in
   let name = name_theory ori_file in
+  fprintf chan_out "theory %s\n" name;
   let g =
     {i_vars = []; r_vars = []; i_funs = ["abs_int"];
      r_funs = ["abs_real";"real_of_int"; "float";"sqrt_real"];
@@ -77,24 +77,23 @@ let () =
      map_lib   = false; abs_int   = false; abs_real  = false;
      real_of_int = false; sqrt_real = false; mode = false;
      unit = false} in
-  fprintf fmt "theory %s@." name;
   List.iter (fun st ->
     match st with
     | TypeDecl _ ->
-       fprintf fmt "%a" print_type (g, lib, st)
+       fprintf chan_out "%a" print_type (g, lib, st)
     | Logic _ ->
-       fprintf fmt "%a" print_logic (g, lib, st, funs_to_remove)
+       fprintf chan_out "%a" print_logic (g, lib, st, funs_to_remove)
     | Function_def _ ->
-       fprintf fmt "%a" print_func (g, lib, st, funs_to_remove)
+       fprintf chan_out "%a" print_func (g, lib, st, funs_to_remove)
     | Predicate_def _ ->
-       fprintf fmt "%a" print_pred (g, lib, st, preds_to_remove)
+       fprintf chan_out "%a" print_pred (g, lib, st, preds_to_remove)
     | Axiom _ -> 
-       fprintf fmt "%a" print_axiom (g, lib, st, axioms_to_remove)
+       fprintf chan_out "%a" print_axiom (g, lib, st, axioms_to_remove)
     | Goal _ -> 
-       fprintf fmt "%a" print_goal (g, lib, st)
+       fprintf chan_out "%a" print_goal (g, lib, st)
     | _ -> assert false
     (*| Rewriting _ -> assert false*)
-  )result;
-  fprintf fmt "\n\nend";
+    )result;
+  fprintf chan_out "\n\nend";
   close_in chan_in;
   close_out chan_out

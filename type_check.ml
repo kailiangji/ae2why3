@@ -1,4 +1,4 @@
-open Format
+open Printf
 open Parsed
 
 exception Not_found
@@ -8,7 +8,6 @@ exception Not_Int_Real_Bool
 
 type int_or_real_or_bool = Is_Int | Is_Real | Is_Bool
 
-let fmt1 = std_formatter
 
 let rec find_in_local_vars id l =
   if List.mem id l.int_vars then Is_Int
@@ -28,7 +27,7 @@ let rec find_in_global_funs id g =
   else if List.mem id g.b_funs then Is_Bool
   else raise Not_found
     
-let rec type_lexpr exp g l=
+let rec type_lexpr chan_out exp g l=
   let {pp_loc;pp_desc} = exp in
   match pp_desc with
   | PPvar id ->
@@ -39,7 +38,7 @@ let rec type_lexpr exp g l=
 	   try find_in_global_vars id g
 	   with Not_found ->
 	     begin
-	       Loc.report fmt1 pp_loc;
+	       Loc.report chan_out pp_loc;
 	       raise Not_Int_Real_Bool
 	     end
 	 end
@@ -49,7 +48,7 @@ let rec type_lexpr exp g l=
        try find_in_global_funs id g
        with Not_found -> 
 	 begin
-	   Loc.report fmt1 pp_loc;
+	   Loc.report chan_out pp_loc;
 	   raise Not_Int_Real_Bool
 	 end
      end
@@ -61,7 +60,7 @@ let rec type_lexpr exp g l=
        | ConstTrue | ConstFalse -> Is_Bool
        | _ -> 
 	 begin
-	   Loc.report fmt1 pp_loc;
+	   Loc.report chan_out pp_loc;
 	   raise Not_Int_Real_Bool
 	 end
      end
@@ -72,13 +71,13 @@ let rec type_lexpr exp g l=
        | PPlt | PPle | PPgt | PPge | PPeq
        | PPneq -> Is_Bool 
        | PPadd | PPsub
-       | PPmul | PPdiv -> type_lexpr lexp g l
+       | PPmul | PPdiv -> type_lexpr chan_out lexp g l
        | PPmod -> Is_Int
      end
   | PPprefix (op, exp) ->
      begin
        match op with
-       | PPneg -> type_lexpr exp g l
+       | PPneg -> type_lexpr chan_out exp g l
        | PPnot -> Is_Bool
      end
   | PPget (lexp, rexp) ->
@@ -92,7 +91,7 @@ let rec type_lexpr exp g l=
 		try find_in_global_vars id g
 		with Not_found ->
 		  begin
-		    Loc.report fmt1 lexp.pp_loc;
+		    Loc.report chan_out lexp.pp_loc;
 		    raise Not_Int_Real_Bool
 		  end
 	      end
@@ -108,7 +107,7 @@ let rec type_lexpr exp g l=
 		     try find_in_global_vars id1 g
 		     with Not_found -> 
 		       begin
-			 Loc.report fmt1 e1.pp_loc;
+			 Loc.report chan_out e1.pp_loc;
 			 raise Not_Int_Real_Bool
 		       end
 		   end
@@ -152,7 +151,7 @@ let rec type_lexpr exp g l=
        | PPTbool -> Is_Bool
        | _ -> 
 	 begin
-	   Loc.report fmt1 e.pp_loc;
+	   Loc.report chan_out e.pp_loc;
 	   raise Not_Math_Expr
 	 end
      end
