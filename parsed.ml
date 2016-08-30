@@ -109,7 +109,7 @@ type lib_include =
    mutable map_lib   : bool; mutable abs_int     : bool;
    mutable abs_real  : bool; mutable real_of_int : bool;
    mutable sqrt_real : bool; mutable mode        : bool;
-   mutable unit      : bool}
+   mutable unit      : bool; mutable int_div     : bool}
 
 type filters =
   {mutable axioms : string list; mutable funs  : string list;

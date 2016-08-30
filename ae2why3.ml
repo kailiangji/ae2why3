@@ -76,7 +76,7 @@ let () =
      float_rnd = false; float_sgl = false; float_dbl = false;
      map_lib   = false; abs_int   = false; abs_real  = false;
      real_of_int = false; sqrt_real = false; mode = false;
-     unit = false} in
+     unit = false; int_div = false} in
   List.iter (fun st ->
     match st with
     | TypeDecl _ ->

@@ -10,11 +10,18 @@ function f2(i:int,j:int):int = i + j + 2
 
 function f3 (i : real,j : real) : real = ((i + j) + 2.)
 
-function f4 (i : int, j : int) : int = i % j
+
+function f4 (i : real, j : real) : real = i / j
+
 
 logic a : (int, real) farray
-function f3(b : int farray): bool = b = b[j<-b[i],k<-w]
 
+function f5(b : (int, real) farray): bool =
+	 forall i, j, k : int. forall w : real.
+	 b = b[j<-b[i],k<-w]
+
+
+function f6 (i : int, j : int) : int = (i / j) + 1
 
 predicate p(x : int, y : int) = x + y = 0
 
@@ -34,7 +41,7 @@ axiom mem_empty:
   not mem(x, empty)
 
 axiom mem_add:
-  forall x, y : 'a. forall s : 'a set.
+  forall x, y : 'a. forall s : 'a set[mem(x, add(y, s))].
   mem(x, add(y, s)) <->
   (x = y or mem(x, s))
 
@@ -56,7 +63,7 @@ goal g_4:
 goal g_5 :
   forall i,j,k:int.
   forall v,w : 'a.
-  forall b : 'a farray.
+  forall b : (int,'a) farray.
   b = b[j<-b[i],k<-w] ->
   i = 1 ->
   j = 2 -> 
@@ -70,7 +77,7 @@ goal g6 :
 goal g7 :
   forall i, j : int.
   i = 1 -> j = 2 ->
-  f2(i,j) + 2 = 5
+  f2(i,j) + 2 >= 5
 
 goal g8:
 forall i, j : real.
@@ -92,3 +99,7 @@ goal g10:
    i = 4.5 ->
    j = 3.5 ->
    v
+
+goal div_mod:
+forall i, j : int.
+j <> 0 -> (i / j) * j + (i % j) = i
