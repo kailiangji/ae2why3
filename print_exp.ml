@@ -925,25 +925,35 @@ let print_func chan_out (g,lib,f, f_rm) =
      else
        begin
 	 let l = {int_vars = []; real_vars = []; bool_vars = []} in
-	 let fun_lst = ref [] in
-	 test_fun_names g lib exp fun_lst;
-	 List.iter (fun fname -> fprintf chan_out "%a" print_modules fname)
-	   (List.rev !fun_lst);
-	 List.iter (fun arg ->
-	   let (_,id,ty) = arg in
-	   match ty with
-	   | PPTint -> l.int_vars <- id :: l.int_vars
-	   | PPTreal -> l.real_vars <- id :: l.real_vars
-	   | PPTbool -> l.bool_vars <- id :: l.bool_vars
-	   | _ -> ()
-	 )args;
+	 let lib_lst = ref [] in
+	 List.iter
+	   (fun arg ->
+	     let (_,id,ty) = arg in
+	     begin
+	       test_types1 lib [ty] lib_lst;
+	       match ty with
+	       | PPTint  -> l.int_vars  <- id :: l.int_vars
+	       | PPTreal -> l.real_vars <- id :: l.real_vars
+	       | PPTbool -> l.bool_vars <- id :: l.bool_vars
+	       | _ -> ()
+	     end
+	   )args;
 	 begin
+	   test_types1 lib [prim_ty] lib_lst;
 	   match prim_ty with
 	   | PPTint -> g.i_funs <- (fst name_id) :: g.i_funs
 	   | PPTreal -> g.r_funs <- (fst name_id) :: g.r_funs
 	   | PPTbool -> g.b_funs <- (fst name_id) :: g.b_funs
 	   | _ -> ()
 	 end;
+	 List.iter
+	   (fun lib -> print_modules chan_out lib)
+	   (List.rev !lib_lst);
+	 let fun_lst = ref [] in
+	 test_fun_names g lib exp fun_lst;
+	 List.iter (fun fname ->
+	   fprintf chan_out "%a" print_modules fname)
+	   (List.rev !fun_lst);
 	 fprintf chan_out "\n\nfunction %a%a: %a = %a"
 	   print_fun_name name_id print_fun_args args
 	   print_ppure_type prim_ty  print_lexpr (g, l, exp)
