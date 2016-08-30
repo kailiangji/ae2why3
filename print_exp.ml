@@ -758,28 +758,28 @@ let print_pp_infix chan_out (g, l, rexp, op) =
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "<"
        | Is_Real -> fprintf chan_out "<."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPle ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "<="
        | Is_Real -> fprintf chan_out "<=."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPgt ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out ">"
        | Is_Real -> fprintf chan_out ">."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPge ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out ">="
        | Is_Real -> fprintf chan_out ">=."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPeq -> fprintf chan_out "="
   | PPneq -> fprintf chan_out "<>"
@@ -788,28 +788,28 @@ let print_pp_infix chan_out (g, l, rexp, op) =
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "+"
        | Is_Real -> fprintf chan_out "+."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPsub ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "-"
        | Is_Real -> fprintf chan_out "-."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPmul ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "*"
        | Is_Real -> fprintf chan_out "*."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPdiv ->
      begin
        match type_lexpr rexp g l with
        | Is_Int -> fprintf chan_out "div"
        | Is_Real -> fprintf chan_out "/."
-       | _ -> begin Loc.report stdout rexp.pp_loc; raise Not_Int_Real end
+       | _ -> begin Loc.report rexp.pp_loc; raise Not_Int_Real end
      end
   | PPmod -> fprintf chan_out "mod"
 
@@ -842,7 +842,7 @@ let rec print_lexpr chan_out (g, l, expr) =
 		 | _,_ -> assert false
 	       end
 	    | _ -> assert false
-	  end
+       end
        | "abs_int" -> fprintf chan_out "(IA.abs%a)" print_lexprs (g, l, exprs)
        | "abs_real" -> fprintf chan_out "(RA.abs%a)" print_lexprs (g, l, exprs)
        | "real_of_int" ->
@@ -881,49 +881,50 @@ let rec print_lexpr chan_out (g, l, expr) =
       | ConstBitv b -> fprintf chan_out "%s" b
       | ConstInt i -> fprintf chan_out "%s" i
       | ConstReal n -> fprintf chan_out "%s"
-	 (string_of_float (Num.float_of_num n)) 
+	 (string_of_float (Num.float_of_num n)) (*?*)
       | ConstTrue -> fprintf chan_out "true"
       | ConstFalse -> fprintf chan_out "false"
       | ConstVoid -> fprintf chan_out "Tuple0"
     end
-  | PPinfix (lexp, op, rexp) -> 
+  | PPinfix (e1, op, e2) -> 
     begin
       match op with
-      | PPmod -> fprintf chan_out "(%a %a %a)"
-	 print_pp_infix (g, l, lexp, op)
-	 print_lexpr (g, l, lexp)
-	 print_lexpr (g, l, rexp)
+      | PPmod ->
+	 fprintf chan_out "(%a %a %a)"
+	   print_pp_infix (g, l, e1, op)
+	   print_lexpr (g, l, e1)
+	   print_lexpr (g, l, e2)
       | PPand | PPor | PPimplies | PPiff | PPneq ->
 	 fprintf chan_out "(%a %a %a)" 
-	   print_lexpr (g, l, lexp)
-	   print_pp_infix (g, l, rexp, op)
-	   print_lexpr (g, l, rexp)
+	   print_lexpr (g, l, e1)
+	   print_pp_infix (g, l, e2, op)
+	   print_lexpr (g, l, e2)
       | PPlt | PPle | PPgt | PPge | PPeq ->
 	 fprintf chan_out "%a %a %a" 
-	   print_lexpr (g, l, lexp)
-	   print_pp_infix (g, l, rexp, op)
-	   print_lexpr (g, l, rexp)
+	   print_lexpr (g, l, e1)
+	   print_pp_infix (g, l, e2, op)
+	   print_lexpr (g, l, e2)
       | PPdiv ->
-	 if type_lexpr lexp g l = Is_Int then
+	 if type_lexpr e1 g l = Is_Int then
 	 begin
 	   fprintf chan_out "(%a %a %a)"
-	     print_pp_infix (g, l, lexp, op)
-	     print_lexpr (g, l, lexp)
-	     print_lexpr (g, l, rexp)
+	     print_pp_infix (g, l, e1, op)
+	     print_lexpr (g, l, e1)
+	     print_lexpr (g, l, e2)
 	 end
 	 else
 	   begin
-	     assert (type_lexpr lexp g l = Is_Real);
+	     assert (type_lexpr e1 g l = Is_Real);
 	     fprintf chan_out "(%a %a %a)" 
-	       print_lexpr (g, l, lexp)
-	       print_pp_infix (g, l, rexp, op)
-	       print_lexpr (g, l, rexp)
+	       print_lexpr (g, l, e1)
+	       print_pp_infix (g, l, e2, op)
+	       print_lexpr (g, l, e2)
 	   end
       | _ ->
 	 fprintf chan_out "(%a %a %a)" 
-	 print_lexpr (g, l, lexp)
-	 print_pp_infix (g, l, lexp, op)
-	 print_lexpr (g, l, rexp)
+	 print_lexpr (g, l, e1)
+	 print_pp_infix (g, l, e1, op)
+	 print_lexpr (g, l, e2)
     end 
   | PPprefix (op, exp) ->
     begin
@@ -935,20 +936,22 @@ let rec print_lexpr chan_out (g, l, expr) =
 	   fprintf chan_out "(-.%a)" print_lexpr (g, l, exp)
       | PPnot -> fprintf chan_out "(not %a)" print_lexpr (g, l, exp)
     end
-  | PPget (lexp, rexp) ->
+  | PPget (e1, e2) ->
      fprintf chan_out "%a[%a]"
-       print_lexpr (g, l, lexp) print_lexpr (g, l, rexp)
-  | PPset (lexp, mexp, rexp) ->
+       print_lexpr (g, l, e1) print_lexpr (g, l, e2)
+  | PPset (e1, mexp, e2) ->
      fprintf chan_out "%a%a"
        print_arr_set (g, l, expr) print_arr_assig (g, l, expr)
   | PPdot (exp, id) -> assert false
   | PPrecord lbl_lst -> assert false
   | PPwith (exp, lbl_lst) -> assert false
-  | PPextract (lexp, mexp, rexp) -> assert false
-  | PPconcat (lexp, rexp) -> assert false
+  | PPextract (e1, mexp, e2) -> assert false
+  | PPconcat (e1, e2) -> assert false
   | PPif (e1, e2, e3) ->
      fprintf chan_out "(if %a then %a else %a)"
-       print_lexpr (g, l, e1) print_lexpr (g, l, e2) print_lexpr (g, l, e3)
+       print_lexpr (g, l, e1)
+       print_lexpr (g, l, e2)
+       print_lexpr (g, l, e3)
   | PPforall (t_lst, pp_ty, exp_lst_lst, exp) -> 
      begin
        begin
@@ -1020,16 +1023,16 @@ let rec print_lexpr chan_out (g, l, expr) =
        fprintf chan_out ".\n   %a)" print_lexpr (g, l, exp)      
      end
   | PPnamed (id, exp) -> assert false
-  | PPlet (id, lexp, rexp) ->
+  | PPlet (id, e1, e2) ->
      begin
        begin
-	 match type_lexpr lexp g l with
+	 match type_lexpr e1 g l with
 	 | Is_Int  -> l.int_vars <- id :: l.int_vars
 	 | Is_Real -> l.real_vars <- id :: l.real_vars
 	 | Is_Bool -> l.bool_vars <- id :: l.bool_vars
        end;
        fprintf chan_out "let %s = %a in\n   %a" id
-	 print_lexpr (g, l, lexp) print_lexpr (g, l, rexp)
+	 print_lexpr (g, l, e1) print_lexpr (g, l, e2)
      end
   | PPcheck exp -> assert false
   | PPcut exp -> assert false
@@ -1056,12 +1059,10 @@ and print_arr_assig chan_out (g, l, expr) =
       | PPset _ -> 
 	 fprintf chan_out "%a[%a<-%a]"
 	   print_arr_assig (g, l, acc)
-	   print_lexpr (g, l, index)
-	   print_lexpr (g, l, value)
+	   print_lexpr (g, l, index) print_lexpr (g, l, value)
       | _ ->
 	 fprintf chan_out "[%a<-%a]"
-	   print_lexpr (g, l, index)
-	   print_lexpr (g, l, value)
+	   print_lexpr (g, l, index) print_lexpr (g, l, value)
     end
   | _ -> assert false
 

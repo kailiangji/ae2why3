@@ -21,7 +21,7 @@ function f5(b : (int, real) farray): bool =
 	 b = b[j<-b[i],k<-w]
 
 
-function f6 (i : int, j : int) : int = (i / j) + 1
+function f6 (i : int, j : int) : int = (i / j) + 1.
 
 predicate p(x : int, y : int) = x + y = 0
 
